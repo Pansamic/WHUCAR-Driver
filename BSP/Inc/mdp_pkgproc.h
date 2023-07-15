@@ -33,7 +33,6 @@ extern "C" {
 #define PKG_DEFAULT_HEAD1         0XC8
 #define PKG_DEFAULT_HEAD2         0XFF
 
-
 /**********************************************************************************************
  *                                                                                            *
  *                                         TYPEDEF                                            *
