@@ -55,7 +55,7 @@ void TV_UART_Init(void)
 	// UARTFIFOLevelSet(UART2_BASE, UART_FIFO_RX1_8, UART_FIFO_TX1_8);
     UARTFIFODisable(UART2_BASE);
     UARTIntRegister(UART2_BASE,UART2_IRQHandler);
-    IntPrioritySet(INT_UART2,2<<5);
+    IntPrioritySet(INT_UART2,2<<5); 
     IntEnable(INT_UART2);
 #endif
 

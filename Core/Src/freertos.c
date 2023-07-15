@@ -40,17 +40,8 @@ void TV_FREERTOS_Init(void)
 
 void AdjustCar(TimerHandle_t xTimer)
 {
-	TickType_t xLastWakeTime;
-	/* delay time must equal to Motor.Encoder.Interval */
-	const TickType_t xFrequency = 10;
-	xLastWakeTime = xTaskGetTickCount();
-
-  	/* Infinite loop */
-  	for(;;)
-  	{
-		vTaskDelayUntil( &xLastWakeTime, xFrequency );
-		Car_Adjust();
-  	}
+	Car_Adjust();
+	printf("X:%.2fcm | Y:%.2fcm | Angle:%.2frad\r\n", Car.CurrentxAxisDistance, Car.CurrentyAxisDistance, Car.CurrentYaw);
 }
 
 void KeyDetect(void * argument)
