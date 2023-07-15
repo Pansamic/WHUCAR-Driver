@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.md": "markdown",
+        "tm4c129_it.h": "c",
+        "math.h": "c",
+        "main.h": "c",
+        "tv_gpio.h": "c",
+        "tv_i2c.h": "c",
+        "4wheel_differential.h": "c",
+        "hw_memmap.h": "c",
+        "motor.h": "c",
+        "stdint.h": "c",
+        "tv_uart.h": "c"
+    }
+}
