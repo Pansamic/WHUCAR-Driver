@@ -13,13 +13,13 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <timers.h>
-TaskHandle_t Task_AdjustCar;
+TimerHandle_t Timer_AdjustCar;
 TaskHandle_t TaskHandle_KeyDetect;
 TaskHandle_t TaskHandle_LEDBlink;
 TaskHandle_t TaskHandle_K210ioProcess;
 TimerHandle_t TimerHandle_UpdateIMU;
 
-void AdjustCar(void * argument);
+void AdjustCar(TimerHandle_t xTimer);
 void KeyDetect(void * argument);
 void LEDBlink(void * argument);
 void Jetsonio_Process(void * argument);
@@ -27,7 +27,8 @@ void UpdateIMU(TimerHandle_t xTimer);
 
 void TV_FREERTOS_Init(void)
 {
-    xTaskCreate(AdjustCar, "Task_AdjustCar", 512, NULL, 3, &Task_AdjustCar);
+    
+	xTimerCreate("Timer_AdjustCar", ENCODER_UPDATE_INTERVAL, pdTRUE, NULL, AdjustCar);
 	xTaskCreate(KeyDetect, "Task_KeyDetect", 128, NULL, 2, &TaskHandle_KeyDetect);
 	xTaskCreate(LEDBlink, "Task_LEDBlink", 128, NULL, 2, &TaskHandle_LEDBlink);
 	xTaskCreate(Jetsonio_Process, "Task_JetsonioProcess", 256, NULL, 2, &TaskHandle_K210ioProcess);
@@ -37,7 +38,7 @@ void TV_FREERTOS_Init(void)
 	// xTimerStart(TimerHandle_UpdateIMU, 0);
 }
 
-void AdjustCar(void * argument)
+void AdjustCar(TimerHandle_t xTimer)
 {
 	TickType_t xLastWakeTime;
 	/* delay time must equal to Motor.Encoder.Interval */
@@ -49,13 +50,6 @@ void AdjustCar(void * argument)
   	{
 		vTaskDelayUntil( &xLastWakeTime, xFrequency );
 		Car_Adjust();
-//		printf("%.3f\n",LeftFrontMotor.CurrentAngle);
-		// AdjustMotor(&LeftFrontMotor);
-		// AdjustMotor(&LeftRearMotor);
-		// AdjustMotor(&RightFrontMotor);
-		// AdjustMotor(&RightRearMotor);
-		// printf("%d, %d, %d, %d\r\n",LeftFrontMotor.EncSource, LeftRearMotor.EncSource, RightFrontMotor.EncSource, RightRearMotor.EncSource);
-		// printf("%d\r\n",EncSource_LeftFrontMotor);
   	}
 }
 

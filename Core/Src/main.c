@@ -115,20 +115,6 @@ int main( void )
 	TV_PWM_Init();
 	TV_ADC0_Init();
 
-    // for(uint8_t i=0; i<18 ; i++)
-    // {
-    //     UARTCharPut(UART1_BASE, Name[i]);
-    // }
-    // SysCtlDelay(SYSTEM_FREQUENCY);
-    // for(uint8_t i=0; i<16 ; i++)
-    // {
-    //     UARTCharPut(UART1_BASE, Baud[i]);
-    // }
-    // SysCtlDelay(SYSTEM_FREQUENCY);
-    // for(uint8_t i=0; i<14 ; i++)
-    // {
-    //     UARTCharPut(UART1_BASE, PIN[i]);
-    // }
 #if USE_K210_UART
     io_Init(&K210io, K210_UART, K210io_InputBuf, K210_INTPUTBUF_SIZE, K210io_OutputBuf1, K210_OUTPUTBUF1_SIZE, K210io_OutputBuf2, K210_OUTPUTBUF2_SIZE);
     io_PackageMode(&K210io, K210PackageContainer, 1, 9, K210_PackageProcess);
@@ -140,15 +126,6 @@ int main( void )
     io_PackageMode(&Jetsonio, JetsonPackageContainer, 1, 9, Jetson_PackageProcess);
     io_SetPkgParseFmt(&Jetsonio,&JetsonPkgFmt);
 #endif
-    // GPIOPinWrite(LFMotor_RotateDirectionCtrl1_GPIO_Port, LFMotor_RotateDirectionCtrl1_Pin, LFMotor_RotateDirectionCtrl1_Pin);
-    // GPIOPinWrite(LFMotor_RotateDirectionCtrl2_GPIO_Port, LFMotor_RotateDirectionCtrl2_Pin, ~LFMotor_RotateDirectionCtrl2_Pin);
-    // GPIOPinWrite(RFMotor_RotateDirectionCtrl1_GPIO_Port, RFMotor_RotateDirectionCtrl1_Pin, RFMotor_RotateDirectionCtrl1_Pin);
-    // GPIOPinWrite(RFMotor_RotateDirectionCtrl2_GPIO_Port, RFMotor_RotateDirectionCtrl2_Pin, ~RFMotor_RotateDirectionCtrl2_Pin);
-    // GPIOPinWrite(LRMotor_RotateDirectionCtrl1_GPIO_Port, LRMotor_RotateDirectionCtrl1_Pin, LRMotor_RotateDirectionCtrl1_Pin);
-    // GPIOPinWrite(LRMotor_RotateDirectionCtrl2_GPIO_Port, LRMotor_RotateDirectionCtrl2_Pin, ~LRMotor_RotateDirectionCtrl2_Pin);
-    // GPIOPinWrite(RRMotor_RotateDirectionCtrl1_GPIO_Port, RRMotor_RotateDirectionCtrl1_Pin, RRMotor_RotateDirectionCtrl1_Pin);
-    // GPIOPinWrite(RRMotor_RotateDirectionCtrl2_GPIO_Port, RRMotor_RotateDirectionCtrl2_Pin, ~RRMotor_RotateDirectionCtrl2_Pin);
-    // for(;;);
     
     DCMotor_Init(&LeftFrontMotor, DCMOTOR_DEFAULT_DIRECTION, PWM0_BASE, PWM_OUT_3, LFMotor_RotateDirectionCtrl1_GPIO_Port, LFMotor_RotateDirectionCtrl1_Pin, LFMotor_RotateDirectionCtrl2_GPIO_Port, LFMotor_RotateDirectionCtrl2_Pin);
     DCMotor_Init(&LeftRearMotor, DCMOTOR_DEFAULT_DIRECTION, PWM0_BASE, PWM_OUT_2, LRMotor_RotateDirectionCtrl1_GPIO_Port, LRMotor_RotateDirectionCtrl1_Pin, LRMotor_RotateDirectionCtrl2_GPIO_Port, LRMotor_RotateDirectionCtrl2_Pin);
@@ -156,12 +133,6 @@ int main( void )
     DCMotor_Init(&RightRearMotor, DCMOTOR_REVERSE_DIRECTION, PWM0_BASE, PWM_OUT_0, RRMotor_RotateDirectionCtrl1_GPIO_Port, RRMotor_RotateDirectionCtrl1_Pin, RRMotor_RotateDirectionCtrl2_GPIO_Port, RRMotor_RotateDirectionCtrl2_Pin);
 	
     Car_SetVelocity(0,0);
-    // Car_SetDistance(50,50);
-    // Add_ICM20602(I2C8_BASE);
-    // SetMotorAngle(&LeftFrontMotor, 10);
-    // SetMotorAngle(&LeftRearMotor, 10);
-    // SetMotorAngle(&RightFrontMotor, 10);
-    // SetMotorAngle(&RightRearMotor, 10);
 
     /* FreeRTOS INIT */
 	TV_FREERTOS_Init();
