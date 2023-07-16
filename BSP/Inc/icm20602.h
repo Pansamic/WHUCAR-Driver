@@ -143,8 +143,15 @@ History:
 #define IMU_ONE_G 9.80665f
 #define TEMP_SENSITIVITY 326.8
 #define ROOM_TEMP_OFFSET 25.0
+#define IMU_UPDATE_INTERVAL 5 // unit:ms
 
-
+/* ellipsoid callibration */
+#define ELLIPSOID_CALIBRATION_X_OFFSET -0.0435f
+#define ELLIPSOID_CALIBRATION_Y_OFFSET -0.1272f
+#define ELLIPSOID_CALIBRATION_Z_OFFSET -0.1086f
+#define ELLIPSOID_CALIBRATION_X_SCALE 0.9985f
+#define ELLIPSOID_CALIBRATION_Y_SCALE 0.9978f
+#define ELLIPSOID_CALIBRATION_Z_SCALE 1.0005f
 
 /*****************************************************************************************
  *                                                                                       *
@@ -165,7 +172,6 @@ History:
  */
 typedef struct
 {
-
 	/* Gyro related */
     uint8_t GyroRange;
     float GyroResolution;
@@ -191,10 +197,6 @@ typedef struct
 
     float Temperature;
 
-    float Pitch;
-    float Roll;
-    float Yaw;
-
     /* Kalman filter for Gyro and its output values */
     float AngleX;
     float AngleY;
@@ -216,7 +218,9 @@ extern ICM20602_t ICM20602_dev;
 void     Add_ICM20602           ( void );
 void     ICM20602_SetAccRange   ( uint8_t Range );
 void     ICM20602_SetGyroRange  ( uint8_t Range );
-void     ICM20602_Update        ( uint16_t TimeInterval );
+void     ICM20602_Update        ( void );
+
+
 #ifdef __cplusplus
 }
 #endif
