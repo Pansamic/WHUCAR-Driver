@@ -10,7 +10,7 @@
  */
 #include <4wheel_differential.h>
 #include <motor.h>
-
+#include <math.h>
 extern DCMotor LeftFrontMotor;
 extern DCMotor LeftRearMotor;
 extern DCMotor RightFrontMotor;
@@ -23,37 +23,16 @@ void Car_AngleControl(void);
 
 void Car_Adjust(void)
 {
-	float CarLeftDisplace = 0;
-	float CarRightDisplace = 0;
+	float CarLeftDisplace = (LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS;
+	float CarRightDisplace = (RightFrontMotor.CurrentCount + RightRearMotor.CurrentCount) / 2 * WHEEL_RADIUS;
 	float CarAngleDisplace = 0;
     switch(Car.RunningMode)
     {
         case CARMODE_VELOCITY:
             Car_AdjustVelocity();
-			/* since encoder count value will be cleared when car running in
-			 * VELOCITY mode, we can just fetch the current encoder value
-			 * and calculate the distance and velocity of both left and right
-			 * side of car */
-			CarLeftDisplace  = (float)(LeftFrontMotor.CurrentCount + LeftRearMotor.CurrentCount) / 2 * 3.1416f * WHEEL_DIAMETER / (PULSE_PER_ROUND);
-			CarRightDisplace = (float)(RightFrontMotor.CurrentCount + RightRearMotor.CurrentCount) / 2 * 3.1416f * WHEEL_DIAMETER / (PULSE_PER_ROUND);
-			CarAngleDisplace = (float)(CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE;
-			Car.CurrentYaw += CarAngleDisplace;
-			Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cos(Car.CurrentYaw+CarAngleDisplace/2);
-			Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sin(Car.CurrentYaw+CarAngleDisplace/2);
             break;
         case CARMODE_DISTANCE:
-			/* since encoder count won't ve clear when car is running in distance mode,
-			 * we must save the old encoder value first, update encoder and substract
-			 * old count value to calculate the displacement in a short time period. */
-			CarLeftDisplace = ((float)(LeftFrontMotor.CurrentCount+LeftRearMotor.CurrentCount)/2.0f);
-			CarRightDisplace = ((float)(RightFrontMotor.CurrentCount+RightRearMotor.CurrentCount)/2.0f);
             Car_AdjustDistance();
-			CarLeftDisplace = (((float)(LeftFrontMotor.CurrentCount+LeftRearMotor.CurrentCount)/2.0f) - CarLeftDisplace) / 2 * 3.1416f * WHEEL_DIAMETER / (PULSE_PER_ROUND);
-			CarRightDisplace = (((float)(RightFrontMotor.CurrentCount+RightRearMotor.CurrentCount)/2.0f) - CarRightDisplace) / 2 * 3.1416f * WHEEL_DIAMETER / (PULSE_PER_ROUND);
-			CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE;
-			Car.CurrentYaw += CarAngleDisplace;
-			Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cos(Car.CurrentYaw+CarAngleDisplace/2);
-			Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sin(Car.CurrentYaw+CarAngleDisplace/2);
             break;
         case CARMODE_ANGLE:
             Car_AdjustAngle();
@@ -61,6 +40,17 @@ void Car_Adjust(void)
         default:
             break;
     }
+	/**
+	 * calculate pose of car
+	 * 
+	 */
+	CarLeftDisplace  = ((LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarLeftDisplace;
+	CarRightDisplace = ((RightFrontMotor.CurrentCount + RightRearMotor.CurrentCount) / 2 * WHEEL_RADIUS) - CarLeftDisplace;
+	CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE;
+	Car.CurrentYaw += CarAngleDisplace;
+	Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cos(Car.CurrentYaw+CarAngleDisplace/2);
+	Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sin(Car.CurrentYaw+CarAngleDisplace/2);
+
 }
 /*****************************************************************************************************
  * @name:Car_SetVelocity
@@ -163,7 +153,6 @@ void Car_AdjustDistance(void)
 
 	LeftWheelAngle  = DisToAngle( WHEEL_RADIUS,Car.AdjustedLeftDistance);
 	RightWheelAngle = DisToAngle( WHEEL_RADIUS,Car.AdjustedRightDistance);
-
 	SetMotorAngle(&LeftFrontMotor, LeftWheelAngle );
 	SetMotorAngle(&LeftRearMotor,  LeftWheelAngle );
 	SetMotorAngle(&RightFrontMotor,RightWheelAngle);

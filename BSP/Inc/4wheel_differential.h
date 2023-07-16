@@ -19,7 +19,7 @@
 
 #define WHEEL_DIAMETER   6.95f
 #define WHEEL_RADIUS     (WHEEL_DIAMETER / 2.0f)
-#define X_AXIS_WHELL_DISTANCE  10.0f
+#define X_AXIS_WHELL_DISTANCE  16.5f
 #define Y_AXIS_WHELL_DISTANCE  10.0f
 #define DisToAngle(Radius,Displace) ((Displace)/(Radius))
 #define LinVelToAngVel(Radius,LinearVel)  ((LinearVel)/(Radius))

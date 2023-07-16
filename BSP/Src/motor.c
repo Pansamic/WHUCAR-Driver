@@ -150,6 +150,8 @@ void MotorVelocityControl(DCMotor *Motor)
 						     (((float)PULSE_PER_ROUND)*
 	                         ((float)ENCODER_UPDATE_INTERVAL/1000));
 
+	Motor->CurrentAngle += 6.283186f * Motor->CurrentCount/PULSE_PER_ROUND;
+
 	PID_Update(&(Motor->VelocityController), Motor->TargetVelocity, Motor->CurrentVelocity);
 	Motor->AdjustedVelocity = Motor->VelocityController.OutputVal;
 
