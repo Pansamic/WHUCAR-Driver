@@ -29,7 +29,7 @@ extern "C"{
 #define USE_BLE_UART_RECEIVE 1
 #endif
 
-#define USE_JETSON_UART 1
+#define USE_JETSON_UART 0
 #if USE_JETSON_UART
 #define JETSON_UART UART2_BASE
 #define USE_JETSON_UART_TRANSMIT 0
@@ -43,7 +43,7 @@ extern "C"{
 #define USE_OPENMV_UART_RECEIVE 1
 #endif
 
-#define USE_USB_UART 0
+#define USE_USB_UART 1
 #if USE_USB_UART
 #define USB_UART UART4_BASE
 #define USE_USB_UART_TRANSMIT 1

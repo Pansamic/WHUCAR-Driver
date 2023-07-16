@@ -24,6 +24,8 @@ void UART4_IRQHandler(void);
 
 void uDMA_IRQHandler(void);
 
+void I2C8_IntHandler(void);
+
 #ifdef __cplusplus
 }
 #endif

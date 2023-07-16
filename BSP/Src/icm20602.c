@@ -18,25 +18,30 @@ History:
 #ifdef __cplusplus
 extern "C"{
 #endif
-#include <math.h>
-#include <tv_i2c.h>
-#include <icm20602.h>
 #include <stdio.h>
+#include <math.h>
+#include <main.h>
+#include <tv_i2c.h>
+#include <hw_ints.h>
+#include <hw_memmap.h>
+#include <icm20602.h>
+
 
 /*****************************************************************************************
  *                                                                                       *
  *                                      MACROS                                           *
  *                                                                                       *
  *****************************************************************************************/
+#define ICM20602_WriteByte(Reg,Value)\
+    I2C8_WriteByte(ICM20602_slave_addr,Reg,Value)
+#define ICM20602_Write(Reg,pData,Length)\
+    I2C8_Write(ICM20602_slave_addr,Reg,pData,Length)
+#define ICM20602_ReadByte(Reg)\
+    I2C8_ReadByte(ICM20602_slave_addr,Reg)
+#define ICM20602_Read(Reg,pBuf,Length)\
+    I2C8_Read(ICM20602_slave_addr,Reg,pBuf,Length)
 
-#define ICM20602_WriteByte(ICM20602_reg,ICM20602_data)\
-    I2C_WriteByte(ICM20602_dev.I2CHandle, ICM20602_slave_addr, ICM20602_reg, ICM20602_data)
 
-#define ICM20602_ReadByte(ICM20602_reg)\
-    I2C_TestReadByte(ICM20602_dev.I2CHandle, ICM20602_slave_addr, ICM20602_reg)
-
-#define ICM20602_ReadData(ICM20602_reg,pBuf,Length)\
-    I2C_ReadData(ICM20602_dev.I2CHandle, ICM20602_slave_addr, ICM20602_reg, pBuf, Length)
 /*****************************************************************************************
  *                                                                                       *
  *                                      CONST                                            *
@@ -65,7 +70,7 @@ enum Gscale
  *                                      VARIABLE                                         *
  *                                                                                       *
  *****************************************************************************************/
-ICM20602_t ICM20602_dev;
+
 
 /*****************************************************************************************
  *                                                                                       *
@@ -74,7 +79,7 @@ ICM20602_t ICM20602_dev;
  *****************************************************************************************/
 void ICM20602_HardwareInit( void );
 void ICM20602_whoAmI( void );
-
+void ICM20602_StaticCallibration(void);
 
 /*****************************************************************************************
  *                                                                                       *
@@ -88,13 +93,11 @@ void ICM20602_whoAmI( void );
  * @retval: none
  * @author: Wang Geng Jie
  *****************************************************************************************************/
-void Add_ICM20602(uint32_t I2CHandle)
+void Add_ICM20602(void)
 {
 	/**********************************************/
 	/*        MPU6050 STRUCT INITIALIZATION       */
 	/**********************************************/
-	/* MPU6050 control i2c device */
-	ICM20602_dev.I2CHandle = I2CHandle;
 
 	/* Accelerometer configuration */
 	ICM20602_dev.Accel_X_RAW = 0;
@@ -121,8 +124,10 @@ void Add_ICM20602(uint32_t I2CHandle)
     ICM20602_dev.Pitch = 0;
     ICM20602_dev.Roll = 0;
     ICM20602_dev.Yaw = 0;
+    
 	ICM20602_HardwareInit();
-
+    SysCtlDelay(120000);
+    ICM20602_StaticCallibration();
 }
 /*****************************************************************************************************
  * @name:ICM20602_whoAmI
@@ -135,15 +140,15 @@ void Add_ICM20602(uint32_t I2CHandle)
  *****************************************************************************************************/
 void ICM20602_whoAmI( void )
 {
-    uint8_t whoAmI = ICM20602_ReadByte(ICM20602_WHO_AM_I);
+    uint8_t RegVal = ICM20602_ReadByte(ICM20602_WHO_AM_I);
     
-    if(whoAmI==0x12)
+    if(RegVal==0x12)
     {
-        printf("ICM20602 is online, Identification code:%x.",whoAmI);
+        printf("ICM20602 is online, Identification code:%x.",RegVal);
     }
     else
     {
-        printf("ICM20602 is offline, Identification code:%x, expect 0x12.",whoAmI);
+        printf("ICM20602 is offline, Identification code:%x, expect 0x12.",RegVal);
     }
 }
 /*****************************************************************************************************
@@ -155,28 +160,52 @@ void ICM20602_whoAmI( void )
  *****************************************************************************************************/
 void ICM20602_HardwareInit( void )
 {
+    /* Reset ICM20602 */
+    ICM20602_WriteByte(ICM20602_PWR_MGMT_1,0x80);
+    SysCtlDelay(12000000);
+
     /* CLK_SEL=0 internal 20MHz, TEMP_DIS=0, SLEEP=0 */
-    ICM20602_WriteByte(ICM20602_PWR_MGMT_1, 0x00);
+    ICM20602_WriteByte(ICM20602_PWR_MGMT_1,0x01);
 
     /* Enable Acc & Gyro */
-    ICM20602_WriteByte(ICM20602_PWR_MGMT_2, 0x00);
+    ICM20602_WriteByte(ICM20602_PWR_MGMT_2,0x00);
 
     /* 176Hz set TEMP_OUT_L, DLPF=3 (Fs=1KHz):0x03 */
-    ICM20602_WriteByte(ICM20602_CONFIG, 0x01);
+    ICM20602_WriteByte(ICM20602_CONFIG,0x01);
 
     /*  SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
      *  Where INTERNAL_SAMPLE_RATE = 1 kHz */
-    ICM20602_WriteByte(ICM20602_SMPLRT_DIV, 0x00);
+    ICM20602_WriteByte(ICM20602_SMPLRT_DIV,0x00);
 
     /* Average of 8 samples | Accelerometer Low Pass Filter 21.2Hz */
-    ICM20602_WriteByte(ICM20602_ACCEL_CONFIG2, 0x14);
+    ICM20602_WriteByte(ICM20602_ACCEL_CONFIG2,0x14);
 	
-	uint8_t tmp;
-	tmp = ICM20602_ReadByte(ICM20602_ACCEL_CONFIG2);
-	printf("%x\r\n", tmp);
+	// uint8_t tmp;
+	// tmp = ICM20602_ReadByte(ICM20602_ACCEL_CONFIG2);
+	// printf("%x\r\n", tmp);
 	
     ICM20602_SetAccRange(AFS_2G);
     ICM20602_SetGyroRange(GFS_1000DPS);
+}
+
+void ICM20602_StaticCallibration(void)
+{
+    int32_t GyroXSum = 0;
+    int32_t GyroYSum = 0;
+	int32_t GyroZSum = 0;
+    uint8_t Buffer[6];
+
+    for(uint16_t i=0 ; i<10000 ; i++)
+    {
+        ICM20602_Read(ICM20602_GYRO_XOUT_H, Buffer, 6);
+        GyroXSum += (int16_t)((Buffer[0]<<8) | Buffer[1]);
+        GyroYSum += (int16_t)((Buffer[2]<<8) | Buffer[3]);
+        GyroZSum += (int16_t)((Buffer[4]<<8) | Buffer[5]);
+        SysCtlDelay(12000);
+    }
+    ICM20602_dev.GOffsetX = (float)GyroXSum/10000.0f;
+    ICM20602_dev.GOffsetY = (float)GyroYSum/10000.0f;
+    ICM20602_dev.GOffsetZ = (float)GyroZSum/10000.0f;
 }
 
 /*****************************************************************************************************
@@ -186,10 +215,10 @@ void ICM20602_HardwareInit( void )
  * @retval: none
  * @author: Wang Geng Jie
  *****************************************************************************************************/
-void ICM20602_Update()
+void ICM20602_Update(uint16_t TimeInterval)
 {
     uint8_t Buffer[14];
-    ICM20602_ReadData(ICM20602_ACCEL_XOUT_H, Buffer, 14);
+    ICM20602_Read(ICM20602_ACCEL_XOUT_H, Buffer, 14);
     ICM20602_dev.Accel_X_RAW = (Buffer[0]<<8) | Buffer[1];
     ICM20602_dev.Accel_Y_RAW = (Buffer[2]<<8) | Buffer[3];
     ICM20602_dev.Accel_Z_RAW = (Buffer[4]<<8) | Buffer[5];
@@ -201,11 +230,12 @@ void ICM20602_Update()
     ICM20602_dev.Ax = (float)ICM20602_dev.Accel_X_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G;
     ICM20602_dev.Ay = (float)ICM20602_dev.Accel_Y_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G;
     ICM20602_dev.Az = (float)ICM20602_dev.Accel_Z_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G;
-    ICM20602_dev.Gx = ICM20602_dev.Gyro_X_RAW * ICM20602_dev.GyroResolution;
-    ICM20602_dev.Gy = ICM20602_dev.Gyro_Y_RAW * ICM20602_dev.GyroResolution;
-    ICM20602_dev.Gz = ICM20602_dev.Gyro_Z_RAW * ICM20602_dev.GyroResolution;
+    ICM20602_dev.Gx = ((float)ICM20602_dev.Gyro_X_RAW - ICM20602_dev.GOffsetX )* ICM20602_dev.GyroResolution;
+    ICM20602_dev.Gy = ((float)ICM20602_dev.Gyro_Y_RAW - ICM20602_dev.GOffsetY )* ICM20602_dev.GyroResolution;
+    ICM20602_dev.Gz = ((float)ICM20602_dev.Gyro_Z_RAW - ICM20602_dev.GOffsetZ )* ICM20602_dev.GyroResolution;
 
-    ICM20602_dev.Yaw += ICM20602_dev.Gx*sinf(ICM20602_dev.Roll)/cosf(ICM20602_dev.Pitch)+ICM20602_dev.Gy*cosf(ICM20602_dev.Roll)/cosf(ICM20602_dev.Pitch);
+    ICM20602_dev.Yaw += ICM20602_dev.Gz * TimeInterval / 1000.0f;
+
 }
 /*****************************************************************************************
  *                                                                                       *
@@ -243,7 +273,7 @@ void ICM20602_SetAccRange(uint8_t Range)
             break;
     }
     /* bit[4:3] 0=+-2g,1=+-4g,2=+-8g,3=+-16g, ACC_HPF=On (5Hz) */
-    ICM20602_WriteByte(ICM20602_ACCEL_CONFIG, ICM20602_dev.AccelRange<<3);
+    ICM20602_WriteByte(ICM20602_ACCEL_CONFIG,ICM20602_dev.AccelRange<<3);
 }
 /*****************************************************************************************
  *                                                                                       *
@@ -259,6 +289,7 @@ void ICM20602_SetAccRange(uint8_t Range)
  *****************************************************************************************************/
 void ICM20602_SetGyroRange(uint8_t Range)
 {
+    uint8_t RegVal[2];
     switch(Range)
     {
         case GFS_250DPS:
@@ -278,7 +309,7 @@ void ICM20602_SetGyroRange(uint8_t Range)
             ICM20602_dev.GyroRange = GFS_2000DPS;
             break;
     }
-    ICM20602_WriteByte(ICM20602_GYRO_CONFIG, ICM20602_dev.GyroRange<<3); // bit[4:3] 0=+-250d/s,1=+-500d/s,2=+-1000d/s,3=+-2000d/s
+    ICM20602_WriteByte(ICM20602_GYRO_CONFIG,ICM20602_dev.GyroRange<<3); // bit[4:3] 0=+-250d/s,1=+-500d/s,2=+-1000d/s,3=+-2000d/s
 }
 
 #ifdef __cplusplus

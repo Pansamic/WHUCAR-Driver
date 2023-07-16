@@ -13,36 +13,42 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <timers.h>
+#include <tv_uart.h>
 TimerHandle_t TimerHandle_AdjustCar;
 TaskHandle_t TaskHandle_KeyDetect;
 TaskHandle_t TaskHandle_LEDBlink;
-TaskHandle_t TaskHandle_K210ioProcess;
+#if USE_JETSON_UART
+TaskHandle_t TaskHandle_JetsonioProcess;
+#endif
 TimerHandle_t TimerHandle_UpdateIMU;
 
 void AdjustCar(TimerHandle_t xTimer);
 void KeyDetect(void * argument);
 void LEDBlink(void * argument);
+#if USE_JETSON_UART
 void Jetsonio_Process(void * argument);
+#endif
 void UpdateIMU(TimerHandle_t xTimer);
 
 void TV_FREERTOS_Init(void)
 {
-    
 	TimerHandle_AdjustCar = xTimerCreate("Timer_AdjustCar", ENCODER_UPDATE_INTERVAL, pdTRUE, NULL, AdjustCar);
 	xTaskCreate(KeyDetect, "Task_KeyDetect", 128, NULL, 2, &TaskHandle_KeyDetect);
 	xTaskCreate(LEDBlink, "Task_LEDBlink", 128, NULL, 2, &TaskHandle_LEDBlink);
-	xTaskCreate(Jetsonio_Process, "Task_JetsonioProcess", 256, NULL, 2, &TaskHandle_K210ioProcess);
-	// TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", 100, pdTRUE, NULL, UpdateIMU);
+#if USE_JETSON_UART
+	xTaskCreate(Jetsonio_Process, "Task_JetsonioProcess", 256, NULL, 2, &TaskHandle_JetsonioProcess);
+#endif
+	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", 5, pdTRUE, NULL, UpdateIMU);
 	portENABLE_INTERRUPTS();
 	IntMasterEnable();
 	xTimerStart(TimerHandle_AdjustCar, 0);
-	// xTimerStart(TimerHandle_UpdateIMU, 0);
+	xTimerStart(TimerHandle_UpdateIMU, 0);
 }
 
 void AdjustCar(TimerHandle_t xTimer)
 {
 	Car_Adjust();
-	printf("X:%.2fcm | Y:%.2fcm | Angle:%.2frad\r\n", Car.CurrentxAxisDistance, Car.CurrentyAxisDistance, Car.CurrentYaw);
+	// printf("X:%.2fcm | Y:%.2fcm | Angle:%.2frad\r\n", Car.CurrentxAxisDistance, Car.CurrentyAxisDistance, Car.CurrentYaw);
 	// printf("%.3f | %.3f\r\n", LeftFrontMotor.CurrentAngle, LeftFrontMotor.CurrentVelocity);
 }
 
@@ -76,6 +82,7 @@ void LEDBlink(void * argument)
 		vTaskDelay(500);
 	}
 }
+#if USE_JETSON_UART
 void Jetsonio_Process(void * argument)
 {
 	for(;;)
@@ -85,11 +92,12 @@ void Jetsonio_Process(void * argument)
 		_io_OutputProcess(&Jetsonio);
 	}
 }
+#endif
 void UpdateIMU(TimerHandle_t xTimer)
 {
 	configASSERT(xTimer);
-	ICM20602_Update();
-	printf("%f\r\n", ICM20602_dev.Yaw);
+	ICM20602_Update(5);
+	printf("%f\n", ICM20602_dev.Yaw);
 }
 
 void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )

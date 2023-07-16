@@ -12,7 +12,11 @@
 #include <tm4c129_it.h>
 #include <tv_dma.h>
 #include <tv_uart.h>
+#include <tv_i2c.h>
 #include <mdp_io.h>
+#include <icm20602.h>
+
+extern tI2CMInstance g_sI2CMSimpleInst;
 
 void LFEA_Process(void);
 void LFEB_Process(void);
@@ -142,6 +146,11 @@ void UART4_IRQHandler(void)
 	}
 }
 
+void I2C8_IntHandler(void)
+{
+	// I2CMIntHandler(&ICM20602_dev.I2CInstance);
+	I2CMIntHandler(&I2C8Inst);
+}
 
 /*************************************************************************************/
 /*                             Auxilary Function                                     */

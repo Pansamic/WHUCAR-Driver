@@ -427,6 +427,11 @@
               <FileType>1</FileType>
               <FilePath>.\Core\Src\tv_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>i2cm_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Core\Src\i2cm_drv.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -20,13 +20,14 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <mdp_io.h>
-
+#include <i2cm_drv.h>
+#include <hw_ints.h>
 DCMotor LeftFrontMotor = {0};
 DCMotor LeftRearMotor = {0};
 DCMotor RightFrontMotor = {0};
 DCMotor RightRearMotor = {0};
 Car_t Car = {0};
-
+ICM20602_t ICM20602_dev = {0};
 /***********************************************/
 /*            K210 UART io Device              */
 /***********************************************/
@@ -110,6 +111,7 @@ void BLE_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
 #endif
 
 void TV_FREERTOS_Init(void);
+
 /******************************************************/
 /******************************************************/
 /*                    MAIN FUNCTION                   */
@@ -126,6 +128,7 @@ int main( void )
     TV_UART_Init();
 //	TV_DMA_Init();
     TV_I2C_Init();
+	// I2CMInit(&ICM20602_dev.I2CInstance, I2C8_BASE, INT_I2C8, 0xff, 0xff, SYSTEM_FREQUENCY);
 	TV_PWM_Init();
 	TV_ADC0_Init();
 
@@ -145,6 +148,8 @@ int main( void )
     DCMotor_Init(&LeftRearMotor, DCMOTOR_DEFAULT_DIRECTION, PWM0_BASE, PWM_OUT_2, LRMotor_RotateDirectionCtrl1_GPIO_Port, LRMotor_RotateDirectionCtrl1_Pin, LRMotor_RotateDirectionCtrl2_GPIO_Port, LRMotor_RotateDirectionCtrl2_Pin);
     DCMotor_Init(&RightFrontMotor, DCMOTOR_REVERSE_DIRECTION, PWM0_BASE, PWM_OUT_1, RFMotor_RotateDirectionCtrl1_GPIO_Port, RFMotor_RotateDirectionCtrl1_Pin, RFMotor_RotateDirectionCtrl2_GPIO_Port, RFMotor_RotateDirectionCtrl2_Pin);
     DCMotor_Init(&RightRearMotor, DCMOTOR_REVERSE_DIRECTION, PWM0_BASE, PWM_OUT_0, RRMotor_RotateDirectionCtrl1_GPIO_Port, RRMotor_RotateDirectionCtrl1_Pin, RRMotor_RotateDirectionCtrl2_GPIO_Port, RRMotor_RotateDirectionCtrl2_Pin);
+	
+	Add_ICM20602();
 	
     Car_SetVelocity(0,0);
 
@@ -208,11 +213,10 @@ void BLE_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
 #endif
 
 
-
 /* retarget the C library printf function to the USART */
 int fputc(int ch, FILE *f)
 {
-    UARTCharPut(BLE_UART, ch);
+    UARTCharPut(USB_UART, ch);
     return ch;
 }
 

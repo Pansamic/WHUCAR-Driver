@@ -15,12 +15,16 @@
 extern "C"{
 #endif
 #include <stdint.h>
+#include <i2cm_drv.h>
+extern tI2CMInstance I2C8Inst;
+extern volatile bool I2C8Done;
+extern tI2CMWrite8 I2C8WriteInst;
 
 void TV_I2C_Init(void);
-uint8_t I2C_ReadByte(uint32_t I2CHandle, uint8_t DevAddress, uint8_t DevReg);
-void I2C_WriteByte(uint32_t I2CHandle, uint8_t DevAddress, uint8_t DevReg, uint8_t Data);
-void I2C_ReadData(uint32_t I2CHandle, uint8_t DevAddress, uint8_t DevReg, uint8_t *Data, uint8_t Length);
-uint8_t I2C_TestReadByte(uint32_t I2CHandle, uint8_t DevAddress, uint8_t DevReg);
+uint8_t I2C8_ReadByte(uint8_t DevAddress, uint8_t DevReg);
+void I2C8_WriteByte(uint8_t DevAddress, uint8_t DevReg, uint8_t Data);
+void I2C8_Read(uint8_t DevAddress, uint8_t DevReg, uint8_t *pDataDst, uint8_t Length);
+void I2C8_Write(uint8_t DevAddress, uint8_t DevReg, uint8_t *pData, uint8_t Length);
 #ifdef __cplusplus
 }
 #endif

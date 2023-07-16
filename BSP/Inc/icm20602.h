@@ -22,6 +22,8 @@ History:
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
+#include <i2cm_drv.h>
 
 /*****************************************************************************************
  *                                                                                       *
@@ -160,41 +162,10 @@ History:
 /**
  * @brief: ICM20602 controller structure
  * @member:
- *     1.I2CHandle: I2C handle structure
- *     2.GyroRange: Gyro range, unit: dps
- *     3.GyroResolution: Gyro resolution, unit: dps/LSB
- *     4.Gyro_X_RAW: Gyro raw data of X axis, 16bit data from register.
- *     5.Gyro_Y_RAW: Gyro raw data of Y axis, 16bit data from register.
- *     6.Gyro_Z_RAW: Gyro raw data of Z axis, 16bit data from register.
- *     7.Gx: Gyro data of X axis, unit: m/s^2.
- *     8.Gy: Gyro data of Y axis, unit: m/s^2.
- *     9.Gz: Gyro data of Z axis, unit: m/s^2.
- *     10.AccelRange: Accelerometer range, unit: g
- *     11.AccelResolution: Accelerometer resolution, unit: g/LSB
- *     12.Accel_X_RAW: Accelerometer raw data of X axis, 16bit data from register.
- *     13.Accel_Y_RAW: Accelerometer raw data of Y axis, 16bit data from register.
- *     14.Accel_Z_RAW: Accelerometer raw data of Z axis, 16bit data from register.
- *     15.Ax: Accelerometer data of X axis, unit: m/s^2.
- *     16.Ay: Accelerometer data of Y axis, unit: m/s^2.
- *     17.Az: Accelerometer data of Z axis, unit: m/s^2.
- *     18.Temperature: Temperature data, unit: degree Celsius.
- *     19.Pitch: Pitch angle, unit: degree.
- *     20.Roll: Roll angle, unit: degree.
- *     21.Yaw: Yaw angle, unit: degree.
- *     22.AngleX: X axis angle of Gyro Kalman filter output.
- *     23.AngleY: Y axis angle of Gyro Kalman filter output.
- *     24.AngleZ: Z axis angle of Gyro Kalman filter output.
- *     25.VelocityX: Kalman filter for Accelerometer and its output values.
- *     26.VelocityY: Kalman filter for Accelerometer and its output values.
- *     27.VelocityZ: Kalman filter for Accelerometer and its output values.
- *     28.KalmanAngleX: Kalman filter for Gyro and its output values.
- *     29.KalmanAngleY: Kalman filter for Gyro and its output values.
- *     30.KalmanAngleZ: Kalman filter for Gyro and its output values.
  */
 typedef struct
 {
-	uint32_t I2CHandle;
-    
+
 	/* Gyro related */
     uint8_t GyroRange;
     float GyroResolution;
@@ -204,6 +175,9 @@ typedef struct
     float Gx;
     float Gy;
     float Gz;
+    float GOffsetX;
+    float GOffsetY;
+    float GOffsetZ;
 
     /* Accelerometer related */
     uint8_t AccelRange;
@@ -239,10 +213,10 @@ extern ICM20602_t ICM20602_dev;
  *                                    DECLARATION                                        *
  *                                                                                       *
  *****************************************************************************************/
-void     Add_ICM20602           ( uint32_t I2CHandle);
+void     Add_ICM20602           ( void );
 void     ICM20602_SetAccRange   ( uint8_t Range );
 void     ICM20602_SetGyroRange  ( uint8_t Range );
-void     ICM20602_Update        ( void );
+void     ICM20602_Update        ( uint16_t TimeInterval );
 #ifdef __cplusplus
 }
 #endif

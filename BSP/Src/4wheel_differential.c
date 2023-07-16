@@ -49,8 +49,8 @@ void Car_Adjust(void)
 	CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE*0.32505176f;
 	// CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/2;
 	Car.CurrentYaw += CarAngleDisplace;
-	Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cos(Car.CurrentYaw+CarAngleDisplace/2);
-	Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sin(Car.CurrentYaw+CarAngleDisplace/2);
+	Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cosf(Car.CurrentYaw+CarAngleDisplace/2);
+	Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sinf(Car.CurrentYaw+CarAngleDisplace/2);
 
 }
 /*****************************************************************************************************
