@@ -24,7 +24,7 @@ void Car_AngleControl(void);
 void Car_Adjust(void)
 {
 	float CarLeftDisplace = (LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS;
-	float CarRightDisplace = (RightFrontMotor.CurrentCount + RightRearMotor.CurrentCount) / 2 * WHEEL_RADIUS;
+	float CarRightDisplace = (RightFrontMotor.CurrentAngle + RightRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS;
 	float CarAngleDisplace = 0;
     switch(Car.RunningMode)
     {
@@ -45,8 +45,9 @@ void Car_Adjust(void)
 	 * 
 	 */
 	CarLeftDisplace  = ((LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarLeftDisplace;
-	CarRightDisplace = ((RightFrontMotor.CurrentCount + RightRearMotor.CurrentCount) / 2 * WHEEL_RADIUS) - CarLeftDisplace;
-	CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE;
+	CarRightDisplace = ((RightFrontMotor.CurrentAngle + RightRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarRightDisplace;
+	CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE*0.32505176f;
+	// CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/2;
 	Car.CurrentYaw += CarAngleDisplace;
 	Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cos(Car.CurrentYaw+CarAngleDisplace/2);
 	Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sin(Car.CurrentYaw+CarAngleDisplace/2);

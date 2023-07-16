@@ -55,7 +55,7 @@ void KeyDetect(void * argument)
 		{
 			while(!GPIOPinRead(KEY0_GPIO_Port,KEY0_Pin))
 			{}
-			Car_SetDistance(20.0f, 20.0f);
+			Car_SetDistance(10.0f, 80.0f);
 		}
 		if(!GPIOPinRead(KEY1_GPIO_Port,	KEY1_Pin))
 		{
@@ -84,7 +84,6 @@ void Jetsonio_Process(void * argument)
 		_io_InputProcess(&Jetsonio);
 		_io_OutputProcess(&Jetsonio);
 	}
-
 }
 void UpdateIMU(TimerHandle_t xTimer)
 {

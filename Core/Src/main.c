@@ -53,6 +53,7 @@ const MDP_PkgFmt K210PkgFmt=
     0,               // tail sequence length equals 0
     0                // tail after check value. useless field, cuz check is disabled.
 };
+void K210_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
 #endif
 /***********************************************/
 /*       Jetson nano UART io Device            */
@@ -62,7 +63,11 @@ const MDP_PkgFmt K210PkgFmt=
 #define JETSON_OUTPUTBUF1_SIZE 64
 #define JETSON_OUTPUTBUF2_SIZE 64
 #define JETSON_INTPUTBUF_SIZE 256
-
+uint8_t Jetsonio_OutputBuf1[JETSON_OUTPUTBUF1_SIZE];
+uint8_t Jetsonio_OutputBuf2[JETSON_OUTPUTBUF2_SIZE];
+uint8_t Jetsonio_InputBuf[JETSON_INTPUTBUF_SIZE];
+uint8_t JetsonPackageContainer[16];
+MDP_io Jetsonio;
 const uint8_t JetsonPkgHead[2]={0xC8,0xFF};
 const MDP_PkgFmt JetsonPkgFmt=
 {
@@ -76,23 +81,35 @@ const MDP_PkgFmt JetsonPkgFmt=
     0,               // tail sequence length equals 0
     0                // tail after check value. useless field, cuz check is disabled.
 };
-uint8_t Jetsonio_OutputBuf1[JETSON_OUTPUTBUF1_SIZE];
-uint8_t Jetsonio_OutputBuf2[JETSON_OUTPUTBUF2_SIZE];
-uint8_t Jetsonio_InputBuf[JETSON_INTPUTBUF_SIZE];
-uint8_t JetsonPackageContainer[16];
-MDP_io Jetsonio;
-
+void Jetson_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
 #endif 
 
+#if USE_BLE_UART
+#define BLE_OUTPUTBUF1_SIZE 64
+#define BLE_OUTPUTBUF2_SIZE 64
+#define BLE_INTPUTBUF_SIZE 256
+uint8_t BLEio_OutputBuf1[BLE_OUTPUTBUF1_SIZE];
+uint8_t BLEio_OutputBuf2[BLE_OUTPUTBUF2_SIZE];
+uint8_t BLEio_InputBuf[BLE_INTPUTBUF_SIZE];
+uint8_t BLEPackageContainer[16];
+MDP_io BLEio;
+const uint8_t BLEPkgHead[2]={0xC8,0xFF};
+const MDP_PkgFmt BLEPkgFmt=
+{
+    1,               // enable package head
+	BLEPkgHead,      // use BLE head sequence
+    2,               // head sequence length equals two
+    0,               // disable data check
+    NULL,            // don't use check algorithm
+    0,               // disable tail
+    NULL,            // use null tail sequence
+    0,               // tail sequence length equals 0
+    0                // tail after check value. useless field, cuz check is disabled.
+};
+void BLE_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
+#endif
 
 void TV_FREERTOS_Init(void);
-#if USE_K210_UART
-void K210_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
-#endif
-
-#if USE_JETSON_UART
-void Jetson_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
-#endif
 /******************************************************/
 /******************************************************/
 /*                    MAIN FUNCTION                   */
@@ -100,9 +117,6 @@ void Jetson_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
 /******************************************************/
 int main( void )
 {
-	// const char Name[]="AT+NAME=ROBUST2\r\n";
-	// const char Baud[]="AT+UART=115200\r\n";
-	// const char PIN[]="AT+PIN=031223\r\n";
     /* SYSTEM CLOCK INIT 120MHZ */
     SysCtlClockFreqSet(SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ | SYSCTL_CFG_VCO_240,SYSTEM_FREQUENCY);
 	IntPriorityGroupingSet(3);
@@ -174,10 +188,31 @@ void Jetson_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
     }
 }
 #endif
+
+#if USE_BLE_UART
+void BLE_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
+{
+	float Left = 0;
+	float Right = 0;
+	memcpy(&Left, PkgDst+1, 4);
+	memcpy(&Right, PkgDst+5, 4);
+    if(PkgDst[0]==0)
+    {
+        Car_SetVelocity(Left, Right);
+    }
+    else if(PkgDst[0]==1)
+    {
+        Car_SetDistance(Left, Right);
+    }
+}
+#endif
+
+
+
 /* retarget the C library printf function to the USART */
 int fputc(int ch, FILE *f)
 {
-    UARTCharPut(USB_UART, ch);
+    UARTCharPut(BLE_UART, ch);
     return ch;
 }
 

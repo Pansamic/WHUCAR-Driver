@@ -85,8 +85,9 @@ void TV_UART_Init(void)
     UARTIntRegister(UART4_BASE,UART4_IRQHandler);
     IntPrioritySet(INT_UART4,2<<5);
 	IntEnable(INT_UART4);
-}
 #endif
+}
+
 
 void UART_Transmit(uint32_t UART_Handle, void *pData, uint32_t Length)
 {
@@ -96,3 +97,4 @@ void UART_Transmit(uint32_t UART_Handle, void *pData, uint32_t Length)
         pData = (uint8_t *)pData + 1;
     }
 }
+
