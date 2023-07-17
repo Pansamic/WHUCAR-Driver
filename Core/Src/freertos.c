@@ -99,7 +99,7 @@ void UpdateIMU(TimerHandle_t xTimer)
 {
 	configASSERT(xTimer);
 	ICM20602_Update();
-	printf("%.5f,%.5f,%.5f\n", ICM20602_dev.AngleX, ICM20602_dev.AngleY, ICM20602_dev.AngleZ);
+//	printf("%.5f,%.5f,%.5f\n", ICM20602_dev.AngleX, ICM20602_dev.AngleY, ICM20602_dev.AngleZ);
 	// printf("%.5f,%.5f,%.5f\n", ICM20602_dev.Ax, ICM20602_dev.Ay, ICM20602_dev.Az);
 }
 

@@ -152,18 +152,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>264</LineNumber>
+          <LineNumber>182</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>8782</Address>
+          <Address>9210</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\BSP\Src\icm20602.c</Filename>
+          <Filename>.\Core\Src\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\WHUCAR_Driver_V2\BSP/Src/icm20602.c\264</Expression>
+          <Expression>\\WHUCAR_Driver_V2\Core/Src/main.c\182</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -185,7 +185,7 @@
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ICM20602_dev</ItemText>
+          <ItemText>Car</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -251,7 +251,7 @@
 
   <Group>
     <GroupName>Core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

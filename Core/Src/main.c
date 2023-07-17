@@ -216,7 +216,7 @@ void BLE_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
 /* retarget the C library printf function to the USART */
 int fputc(int ch, FILE *f)
 {
-    UARTCharPut(USB_UART, ch);
+    UARTCharPut(BLE_UART, ch);
     return ch;
 }
 
