@@ -224,9 +224,9 @@ void ICM20602_Update(void)
     ICM20602_dev.Gyro_Y_RAW = (Buffer[10]<<8) | Buffer[11];
     ICM20602_dev.Gyro_Z_RAW = (Buffer[12]<<8) | Buffer[13];
 
-    ICM20602_dev.Ax = ((float)ICM20602_dev.Accel_X_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G - ELLIPSOID_CALIBRATION_X_OFFSET)/ELLIPSOID_CALIBRATION_X_SCALE;
-    ICM20602_dev.Ay = ((float)ICM20602_dev.Accel_Y_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G - ELLIPSOID_CALIBRATION_Y_OFFSET)/ELLIPSOID_CALIBRATION_Y_SCALE;
-    ICM20602_dev.Az = ((float)ICM20602_dev.Accel_Z_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G - ELLIPSOID_CALIBRATION_Z_OFFSET)/ELLIPSOID_CALIBRATION_Z_SCALE;
+    ICM20602_dev.Ax = ((float)ICM20602_dev.Accel_X_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G - ELLIPSOID_CALIBRATION_X_OFFSET)*ELLIPSOID_CALIBRATION_X_SCALE;
+    ICM20602_dev.Ay = ((float)ICM20602_dev.Accel_Y_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G - ELLIPSOID_CALIBRATION_Y_OFFSET)*ELLIPSOID_CALIBRATION_Y_SCALE;
+    ICM20602_dev.Az = ((float)ICM20602_dev.Accel_Z_RAW * ICM20602_dev.AccelResolution * IMU_ONE_G - ELLIPSOID_CALIBRATION_Z_OFFSET)*ELLIPSOID_CALIBRATION_Z_SCALE;
     ICM20602_dev.Gx = ((float)ICM20602_dev.Gyro_X_RAW - ICM20602_dev.GOffsetX )* ICM20602_dev.GyroResolution;
     ICM20602_dev.Gy = ((float)ICM20602_dev.Gyro_Y_RAW - ICM20602_dev.GOffsetY )* ICM20602_dev.GyroResolution;
     ICM20602_dev.Gz = ((float)ICM20602_dev.Gyro_Z_RAW - ICM20602_dev.GOffsetZ )* ICM20602_dev.GyroResolution;
@@ -236,11 +236,13 @@ void ICM20602_Update(void)
     AngleY = atan2(ICM20602_dev.Ax,ICM20602_dev.Az)*RAD_TO_DEG;
 
     /* the following variables are in degree */
-    // ICM20602_dev.AngleX = Kalman_Filter(&ICM20602_dev.AngleX_Kalman, AngleX, ICM20602_dev.Gx);
-    // ICM20602_dev.AngleY = Kalman_Filter(&ICM20602_dev.AngleY_Kalman, AngleY, ICM20602_dev.Gy);
     ICM20602_dev.AngleX = Kalman_Filter_x(AngleX, ICM20602_dev.Gx);
     ICM20602_dev.AngleY = Kalman_Filter_y(AngleY, ICM20602_dev.Gy);
     ICM20602_dev.AngleZ += ICM20602_dev.Gz * IMU_UPDATE_INTERVAL / 1000.0f;
+
+    ICM20602_dev.VelocityX = ICM20602_dev.Ax * IMU_UPDATE_INTERVAL / 1000.0f;
+    ICM20602_dev.VelocityY = ICM20602_dev.Ay * IMU_UPDATE_INTERVAL / 1000.0f;
+    ICM20602_dev.VelocityZ = ICM20602_dev.Az * IMU_UPDATE_INTERVAL / 1000.0f;
 }
 /*****************************************************************************************
  *                                                                                       *

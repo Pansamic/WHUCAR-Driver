@@ -25,6 +25,7 @@
 #define LinVelToAngVel(Radius,LinearVel)  ((LinearVel)/(Radius))
 #define AngVelToLinVel(Radius,AngularVel) ((Radius)*(AngularVel))
 #define RAD_TO_DEG 57.29578f
+#define DEG_TO_RAD 0.01745329f
 
 typedef struct CarTypeDef
 {

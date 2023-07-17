@@ -8,9 +8,11 @@
  * @copyright Copyright (c) 2023
  * 
  */
+#include <math.h>
 #include <4wheel_differential.h>
 #include <motor.h>
-#include <math.h>
+#include <icm20602.h>
+
 extern DCMotor LeftFrontMotor;
 extern DCMotor LeftRearMotor;
 extern DCMotor RightFrontMotor;
@@ -41,16 +43,30 @@ void Car_Adjust(void)
             break;
     }
 	/**
-	 * calculate pose of car
+	 * calculate pose of car by odometry. We found that odometry is not accurate enough on 4 wheel differentialcar model.
+	 * 
+	 */
+	// CarLeftDisplace  = ((LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarLeftDisplace;
+	// CarRightDisplace = ((RightFrontMotor.CurrentAngle + RightRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarRightDisplace;
+	// CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE*0.32505176f;
+	// CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/2;
+	// Car.CurrentYaw += CarAngleDisplace;
+	// Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cosf(Car.CurrentYaw+CarAngleDisplace/2);
+	// Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sinf(Car.CurrentYaw+CarAngleDisplace/2);
+
+	/**
+	 * @brief calculate pose of car by IMU(ICM20602)
 	 * 
 	 */
 	CarLeftDisplace  = ((LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarLeftDisplace;
 	CarRightDisplace = ((RightFrontMotor.CurrentAngle + RightRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS) - CarRightDisplace;
-	CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/X_AXIS_WHELL_DISTANCE*0.32505176f;
-	// CarAngleDisplace = (CarRightDisplace-CarLeftDisplace)/2;
-	Car.CurrentYaw += CarAngleDisplace;
-	Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cosf(Car.CurrentYaw+CarAngleDisplace/2);
-	Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sinf(Car.CurrentYaw+CarAngleDisplace/2);
+	Car.CurrentYaw = ICM20602_dev.AngleZ * DEG_TO_RAD;
+	Car.CurrentxAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*cosf(Car.CurrentYaw);
+	Car.CurrentyAxisDistance += (CarRightDisplace+CarLeftDisplace)/2*sinf(Car.CurrentYaw);
+
+	Car.CurrentxAxisVelocity = ICM20602_dev.VelocityX * 1000.0f;
+	Car.CurrentyAxisVelocity = ICM20602_dev.VelocityY * 1000.0f;
+
 
 }
 /*****************************************************************************************************

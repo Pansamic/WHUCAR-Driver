@@ -38,7 +38,7 @@ void TV_FREERTOS_Init(void)
 #if USE_JETSON_UART
 	xTaskCreate(Jetsonio_Process, "Task_JetsonioProcess", 256, NULL, 2, &TaskHandle_JetsonioProcess);
 #endif
-	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", 5, pdTRUE, NULL, UpdateIMU);
+	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", IMU_UPDATE_INTERVAL, pdTRUE, NULL, UpdateIMU);
 	portENABLE_INTERRUPTS();
 	IntMasterEnable();
 	xTimerStart(TimerHandle_AdjustCar, 0);
@@ -48,8 +48,10 @@ void TV_FREERTOS_Init(void)
 void AdjustCar(TimerHandle_t xTimer)
 {
 	Car_Adjust();
+	// printf("X:%.4f | Y:%.4f\r\n", Car.CurrentxAxisVelocity, Car.CurrentyAxisVelocity);
 	// printf("X:%.2fcm | Y:%.2fcm | Angle:%.2frad\r\n", Car.CurrentxAxisDistance, Car.CurrentyAxisDistance, Car.CurrentYaw);
 	// printf("%.3f | %.3f\r\n", LeftFrontMotor.CurrentAngle, LeftFrontMotor.CurrentVelocity);
+
 }
 
 void KeyDetect(void * argument)
@@ -98,7 +100,7 @@ void UpdateIMU(TimerHandle_t xTimer)
 	configASSERT(xTimer);
 	ICM20602_Update();
 	printf("%.5f,%.5f,%.5f\n", ICM20602_dev.AngleX, ICM20602_dev.AngleY, ICM20602_dev.AngleZ);
-	// printf("%.5f,%.5f,%.5f\r\n", ICM20602_dev.Ax, ICM20602_dev.Ay, ICM20602_dev.Az);
+	// printf("%.5f,%.5f,%.5f\n", ICM20602_dev.Ax, ICM20602_dev.Ay, ICM20602_dev.Az);
 }
 
 void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )
