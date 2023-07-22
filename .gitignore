@@ -1,0 +1,11 @@
+.vscode/
+
+Listings/
+
+Objects/
+
+*.scvd
+
+keilkill.bat
+
+*.uvguix.*
