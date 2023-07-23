@@ -64,9 +64,18 @@ void TV_GPIO_Init(void)
     GPIOPinTypeGPIOInput(KEY1_GPIO_Port, KEY1_Pin);
     GPIOPinTypeGPIOInput(KEY2_GPIO_Port, KEY2_Pin);
 
+    GPIOPinTypeGPIOOutput(OLED_DC_GPIO_Port, OLED_DC_Pin);
+    GPIOPinTypeGPIOOutput(OLED_RST_GPIO_Port, OLED_RST_Pin);
+    GPIOPinTypeGPIOOutput(OLED_SCLK_GPIO_Port, OLED_SCLK_Pin);
+    GPIOPinTypeGPIOOutput(OLED_MOSI_GPIO_Port, OLED_MOSI_Pin);
+
     /* GPIO interrupt configuration */
     GPIOIntRegister(GPIO_PORTG_BASE, EXTI_GPIOG_IRQHandler);
     IntPrioritySet(INT_GPIOG, 3<<5);
+    GPIOIntRegister(GPIO_PORTQ_BASE, EXTI_GPIOQ_IRQHandler);
+    IntPrioritySet(INT_GPIOQ5, 3<<5);
+    IntPrioritySet(INT_GPIOQ6, 3<<5);
+
 
     GPIOIntEnable(EncA_LeftFront_GPIO_Port, EncA_LeftFront_IntPin);
     GPIOIntTypeSet(EncA_LeftFront_GPIO_Port, EncA_LeftFront_Pin, GPIO_BOTH_EDGES);

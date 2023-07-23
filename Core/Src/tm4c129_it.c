@@ -52,7 +52,6 @@ void EXTI_GPIOQ_IRQHandler(void)
 	if(IntPins&EncB_LeftFront_IntPin)
 		LFEB_Process();
 }
-
 /*
  * @brief:UART0 receive interrupt handler.
  * */
@@ -113,6 +112,7 @@ void UART2_IRQHandler(void)
 /*
  * @brief:UART3 receive interrupt handler.
  * */
+#if USE_TFLUNA_UART
 void UART3_IRQHandler(void)
 {
 	uint32_t IntStatus = UARTIntStatus(UART3_BASE, true);
@@ -123,11 +123,11 @@ void UART3_IRQHandler(void)
 		while(UARTCharsAvail(UART3_BASE))
 		{
 			Char = UARTCharGetNonBlocking(UART3_BASE);
-			UARTCharPutNonBlocking(UART3_BASE,Char);
+			_io_InputBufWrite(&tfluna.ioDevice, &Char, 1);
 		}
 	}
 }
-
+#endif
 /*
  * @brief:UART4 receive interrupt handler.
  * */

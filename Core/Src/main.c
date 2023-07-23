@@ -22,7 +22,8 @@
 #include <task.h>
 #include <mdp_io.h>
 #include <i2cm_drv.h>
-#include <servo.h>
+#include <oled.h>
+
 
 DCMotor LeftFrontMotor = {0};
 DCMotor LeftRearMotor = {0};
@@ -32,6 +33,9 @@ Car_t Car = {0};
 ICM20602_t ICM20602_dev = {0};
 Servo_t Servo1={0};
 Servo_t Servo2={0};
+#if USE_TFLUNA_UART
+TFLuna tfluna={0};
+#endif
 /***********************************************/
 /*            K210 UART io Device              */
 /***********************************************/
@@ -134,7 +138,9 @@ int main( void )
     TV_I2C_Init();
 	TV_PWM_Init();
 	TV_ADC0_Init();
-
+    OLED_Init();
+    OLED_ShowNum(0,0,123456789,9,16);
+    for(;;);
 #if USE_K210_UART
     io_Init(&K210io, K210_UART, K210io_InputBuf, K210_INTPUTBUF_SIZE, K210io_OutputBuf1, K210_OUTPUTBUF1_SIZE, K210io_OutputBuf2, K210_OUTPUTBUF2_SIZE);
     io_PackageMode(&K210io, K210PackageContainer, 1, 9, K210_PackageProcess);
@@ -148,6 +154,11 @@ int main( void )
     io_SetPkgParseFmt(&Jetsonio,&JetsonPkgFmt);
 	printf("Jetson nano UART init done.\r\n");
 #endif
+
+#if USE_TFLUNA_UART
+    Add_TFLuna(&tfluna, "tfluna", TFLUNA_UART);
+#endif
+ 
     DCMotor_Init(&LeftFrontMotor, DCMOTOR_DEFAULT_DIRECTION, PWM0_BASE, PWM_OUT_3, LFMotor_RotateDirectionCtrl1_GPIO_Port, LFMotor_RotateDirectionCtrl1_Pin, LFMotor_RotateDirectionCtrl2_GPIO_Port, LFMotor_RotateDirectionCtrl2_Pin);
     DCMotor_Init(&LeftRearMotor, DCMOTOR_DEFAULT_DIRECTION, PWM0_BASE, PWM_OUT_2, LRMotor_RotateDirectionCtrl1_GPIO_Port, LRMotor_RotateDirectionCtrl1_Pin, LRMotor_RotateDirectionCtrl2_GPIO_Port, LRMotor_RotateDirectionCtrl2_Pin);
     DCMotor_Init(&RightFrontMotor, DCMOTOR_REVERSE_DIRECTION, PWM0_BASE, PWM_OUT_1, RFMotor_RotateDirectionCtrl1_GPIO_Port, RFMotor_RotateDirectionCtrl1_Pin, RFMotor_RotateDirectionCtrl2_GPIO_Port, RFMotor_RotateDirectionCtrl2_Pin);
@@ -159,8 +170,12 @@ int main( void )
 	SetServoAngle(&Servo2, 90);
 	Add_ICM20602();
 
-    Car_SetVelocity(0,0);
-
+    Car_SetVelocity(5,5);
+	// SetMotorPWM(&LeftFrontMotor, 100);
+    // SetMotorVelocity(&LeftFrontMotor, 2);
+//    SetMotorVelocity(&LeftRearMotor, 2);
+//    SetMotorVelocity(&RightFrontMotor, 2);
+//    SetMotorVelocity(&RightRearMotor, 2);
     /* FreeRTOS INIT */
 	TV_FREERTOS_Init();
 	printf("FreeRTOS init done.\r\nNow enter FreeRTOS scheduler.\r\n");

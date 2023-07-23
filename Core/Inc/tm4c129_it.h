@@ -15,7 +15,8 @@ extern "C"{
 #endif
 
 void EXTI_GPIOG_IRQHandler(void);
-
+void EXTI_GPIOQ_IRQHandler(void);
+// void EXTI_GPIOQ6_IRQHandler(void);
 void UART0_IRQHandler(void);
 void UART1_IRQHandler(void);
 void UART2_IRQHandler(void);

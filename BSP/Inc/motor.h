@@ -17,7 +17,7 @@
 #define DCMOTOR_REVERSE_DIRECTION    1
 #define DCMOTOR_DEFAULT_DIRECTION    0
 /* unit : clock cycle */
-#define MOTOR_PWM_PERIOD             6000 
+#define MOTOR_PWM_PERIOD             200 
 #define MOTOR_MAX_VELOCITY           32.0f
 #define PULSE_PER_ROUND              1560
 #define ENCODER_UPDATE_INTERVAL      10 // unit:ms

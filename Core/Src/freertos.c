@@ -16,50 +16,76 @@
 #include <icm20602.h>
 #include <servo.h>
 
-
-
-
+/***********************************************************/
+/*                 FreeRTOS Tasks Handles                  */
+/***********************************************************/
 TimerHandle_t TimerHandle_AdjustCar;
 TimerHandle_t TimerHandle_UpdateIMU;
+TaskHandle_t TaskHandle_CustomApp;
 TaskHandle_t TaskHandle_KeyDetect;
 TaskHandle_t TaskHandle_LEDBlink;
 TaskHandle_t TaskHandle_AdjustServo;
 #if USE_JETSON_UART
 TaskHandle_t TaskHandle_JetsonioProcess;
 #endif
+#if USE_TFLUNA_UART
+TaskHandle_t TaskHandle_TFLunaProcess;
+#endif
 
 
+/***********************************************************/
+/*                 FreeRTOS Tasks Function                 */
+/***********************************************************/
 void AdjustCar(TimerHandle_t xTimer);
 void UpdateIMU(TimerHandle_t xTimer);
+void CustomApp(void * argument);
 void KeyDetect(void * argument);
 void LEDBlink(void * argument);
 void AdjustServo(void * argument);
 #if USE_JETSON_UART
 void Jetsonio_Process(void * argument);
 #endif
-
+#if USE_TFLUNA_UART
+void TFLuna_Process(void * argument);
+#endif
 
 void TV_FREERTOS_Init(void)
 {
 	TimerHandle_AdjustCar = xTimerCreate("Timer_AdjustCar", ENCODER_UPDATE_INTERVAL, pdTRUE, NULL, AdjustCar);
-	xTaskCreate(KeyDetect, "Task_KeyDetect", 128, NULL, 2, &TaskHandle_KeyDetect);
-	xTaskCreate(LEDBlink, "Task_LEDBlink", 128, NULL, 2, &TaskHandle_LEDBlink);
+	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", IMU_UPDATE_INTERVAL, pdTRUE, NULL, UpdateIMU);
+	xTaskCreate(CustomApp, "Task_CustomApp", 256, NULL, 2, &TaskHandle_CustomApp);
+	xTaskCreate(KeyDetect, "Task_KeyDetect", 128, NULL, 1, &TaskHandle_KeyDetect);
+	xTaskCreate(LEDBlink, "Task_LEDBlink", 128, NULL, 1, &TaskHandle_LEDBlink);
 	xTaskCreate(AdjustServo, "Task_AdjustServo", 128, NULL, 2, &TaskHandle_AdjustServo);
 #if USE_JETSON_UART
 	xTaskCreate(Jetsonio_Process, "Task_JetsonioProcess", 256, NULL, 2, &TaskHandle_JetsonioProcess);
 #endif
-	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", IMU_UPDATE_INTERVAL, pdTRUE, NULL, UpdateIMU);
+#if USE_TFLUNA_UART
+	xTaskCreate(TFLuna_Process, "Task_TFLunaProcess", 256, NULL, 2, &TaskHandle_TFLunaProcess);
+#endif
+	
 	portENABLE_INTERRUPTS();
 	IntMasterEnable();
 	xTimerStart(TimerHandle_AdjustCar, 0);
 	xTimerStart(TimerHandle_UpdateIMU, 0);
 }
-
+void CustomApp(void * argument)
+{
+	for(;;)
+	{
+		vTaskDelay(100);
+		// printf("%.2f\r\n", ICM20602_dev.AngleX);
+	}
+}
 void AdjustCar(TimerHandle_t xTimer)
 {
-	Car_Adjust();
+	Car_Adjust();	
 }
-
+void UpdateIMU(TimerHandle_t xTimer)
+{
+	configASSERT(xTimer);
+	ICM20602_Update();
+}
 void KeyDetect(void * argument)
 {
 	for(;;)
@@ -113,11 +139,19 @@ void Jetsonio_Process(void * argument)
 	}
 }
 #endif
-void UpdateIMU(TimerHandle_t xTimer)
+
+#if USE_TFLUNA_UART
+void TFLuna_Process(void * argument)
 {
-	configASSERT(xTimer);
-	ICM20602_Update();
+	for(;;)
+	{
+		vTaskDelay(20);
+		_io_InputProcess(&tfluna.ioDevice);
+		_io_OutputProcess(&tfluna.ioDevice);
+	}
 }
+#endif
+
 
 void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )
 {

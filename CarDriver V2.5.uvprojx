@@ -687,6 +687,16 @@
               <FileType>1</FileType>
               <FilePath>.\BSP\Src\servo.c</FilePath>
             </File>
+            <File>
+              <FileName>tf_luna.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\tf_luna.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\oled.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

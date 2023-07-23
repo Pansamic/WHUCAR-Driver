@@ -42,21 +42,20 @@ extern "C" {
  * @brief:This struct describes a general model of input/outpur device. Input buffer is a ring
  *     buffer. Output module uses ping-pong buffer technique.
  * @params:
- *     1.Name:A string containing the name of io device.
- *     2.huart:the pointer of usart that transmit and receive data.
- *     3.ActivatedOutBufIndex:current writable buffer index.
- *     4.Outputing:1 when buffer data is transmitting, 0 when no buffer is transmitting.
- *     5.OutputBuf:an array that contains two buffer address.
- *     6.OutputBufSize:an array that contains the size of both output buffers.
- *     7.OutputBufPosition:an array that contains the length of data that is put into buffer.
- *     8.InputBuf:the pointer of input buffer.
- *     9.InputBufSize:size of input buffer.
- *     10.InputHeadIndex:ring buffer head index.
- *     11.InputTailIndex:ring buffer tail index.
- *     12.InputBufFull:a flag indicating whether input buffer is full. its value can be 0 or 1.
- *     13.CmdList:chain of 'MDP_Cmd' type node.
- *     14.DataPackage:if the value is 0, it means the io device works in command mode.
- *         if the value is greater than 0, that means the io device works in data package mode.
+ *     1.UART_Handle:the pointer of usart that transmit and receive data.
+ *     2.ActivatedOutBufIndex:the index of activated output buffer.
+ *     3.Outputing:whether the output module is working.
+ *     4.OutputBuf:the pointer of output buffers.
+ *     5.OutputBufSize:the size of output buffers.
+ *     6.OutputBufPosition:the position of output buffers.
+ *     7.InputBuf:the pointer of input buffer.
+ *     8.InputBufLen:the length of input buffer.
+ *     9.OutputBuf1:the pointer of output buffer1.
+ *     10.OutputBuf1Len:the length of output buffer1.
+ *     11.OutputBuf2:the pointer of output buffer2.
+ *     12.OutputBuf2Len:the length of output buffer2.
+ *     13.Stringcb:the callback function when a string is received.
+ *     14.PkgProcessor:the callback function when a package is received.
  * */
 typedef struct ioDeviceTypeDef
 {
