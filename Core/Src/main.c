@@ -140,7 +140,7 @@ int main( void )
 	TV_ADC0_Init();
     OLED_Init();
     OLED_ShowNum(0,0,123456789,9,16);
-    for(;;);
+
 #if USE_K210_UART
     io_Init(&K210io, K210_UART, K210io_InputBuf, K210_INTPUTBUF_SIZE, K210io_OutputBuf1, K210_OUTPUTBUF1_SIZE, K210io_OutputBuf2, K210_OUTPUTBUF2_SIZE);
     io_PackageMode(&K210io, K210PackageContainer, 1, 9, K210_PackageProcess);
