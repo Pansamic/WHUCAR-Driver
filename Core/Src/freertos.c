@@ -10,6 +10,7 @@
  */
 #include <main.h>
 #include <tv_uart.h>
+#include <tv_gpio.h>
 #include <FreeRTOS.h>
 #include <task.h>
 #include <timers.h>
@@ -61,12 +62,12 @@ void TFLuna_Process(void * argument);
 
 void TV_FREERTOS_Init(void)
 {
-	//TimerHandle_AdjustCar = xTimerCreate("Timer_AdjustCar", ENCODER_UPDATE_INTERVAL, pdTRUE, NULL, AdjustCar);
+	TimerHandle_AdjustCar = xTimerCreate("Timer_AdjustCar", ENCODER_UPDATE_INTERVAL, pdTRUE, NULL, AdjustCar);
 	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", IMU_UPDATE_INTERVAL, pdTRUE, NULL, UpdateIMU);
 	//xTaskCreate(CustomApp, "Task_CustomApp", 256, NULL, 2, &TaskHandle_CustomApp);
 	xTaskCreate(KeyDetect, "Task_KeyDetect", 128, NULL, 1, &TaskHandle_KeyDetect);
 	xTaskCreate(LEDBlink, "Task_LEDBlink", 128, NULL, 1, &TaskHandle_LEDBlink);
-	//xTaskCreate(AdjustServo, "Task_AdjustServo", 128, NULL, 2, &TaskHandle_AdjustServo);
+	xTaskCreate(AdjustServo, "Task_AdjustServo", 128, NULL, 2, &TaskHandle_AdjustServo);
 	xTaskCreate(GetIRS, "Task_GetIRS", 128, NULL, 1, &TaskHandle_IRS);
 	xTaskCreate(OLEDDisplay, "Task_OLEDDisplay", 256, NULL, 2, &TaskHandle_OLED);
 
@@ -78,7 +79,7 @@ void TV_FREERTOS_Init(void)
 #endif
 	portENABLE_INTERRUPTS();
 	IntMasterEnable();
-	//xTimerStart(TimerHandle_AdjustCar, 0);
+	xTimerStart(TimerHandle_AdjustCar, 0);
 	xTimerStart(TimerHandle_UpdateIMU, 0);
 }
 void CustomApp(void * argument)
@@ -156,14 +157,22 @@ void GetIRS(void * argument){
 
 void OLEDDisplay(void * argument){
 	for(;;){
-		vTaskDelay(500);
+		vTaskDelay(100);
 		OLED_Clear();
+		/* Line 1 */
 		OLED_ShowString(0,0,"Yaw:");
-		OLED_ShowNum(32,0,(int)ICM20602_dev.AngleZ,3,16);
+		OLED_ShowNum(32,0,(int)(ICM20602_dev.AngleZ*100),5,16);
+		/* Line 2 */
 		OLED_ShowString(0,2,"X:");
-		OLED_ShowNum(16,2,(int)Car.CurrentxAxisDistance,3,16);
+		OLED_ShowNum(16,2,(int)(Car.CurrentxAxisDistance*10),4,16);
 		OLED_ShowString(64,2,"Y:");
-		OLED_ShowNum(80,2,(int)Car.CurrentyAxisDistance,3,16);
+		OLED_ShowNum(80,2,(int)(Car.CurrentyAxisDistance*10),4,16);
+		/* Line 3 */
+		OLED_ShowString(0,4,"S1:");
+		OLED_ShowNum(24,4,Servo1.CurrentAngle,4,16);
+		OLED_ShowString(0,4,"S2:");
+		OLED_ShowNum(88,4,Servo2.CurrentAngle,4,16);
+
 	}
 }
 

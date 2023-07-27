@@ -14,9 +14,9 @@
 
 #include <motor.h>
 
-#define SERVO_180_DEGREE 90
-#define SERVO_270_DEGREE 135
-#define SERVO_360_DEGREE 180
+#define SERVO_180_DEGREE 1
+#define SERVO_270_DEGREE 2
+#define SERVO_360_DEGREE 3
 #define SERVO_PWM_PERIOD 37500
 
 /**

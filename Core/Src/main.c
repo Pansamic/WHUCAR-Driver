@@ -167,8 +167,8 @@ int main( void )
 	printf("DCMotor init done.\r\n");
 	Add_Servo(&Servo1, PWM0_BASE, PWM_OUT_4, SERVO_180_DEGREE, -90.0f, 90.0f);
     Add_Servo(&Servo2, PWM0_BASE, PWM_OUT_5, SERVO_180_DEGREE, -90.0f, 90.0f);
-	SetServoAngle(&Servo1, 90);
-	SetServoAngle(&Servo2, 90);
+	SetServoAngle(&Servo1, 0);
+	SetServoAngle(&Servo2, 0);
 	Add_ICM20602();
 
     // Car_SetVelocity(5,5);

@@ -27,7 +27,6 @@ void Car_Adjust(void)
 {
 	float CarLeftDisplace = (LeftFrontMotor.CurrentAngle + LeftRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS;
 	float CarRightDisplace = (RightFrontMotor.CurrentAngle + RightRearMotor.CurrentAngle) / 2 * WHEEL_RADIUS;
-	float CarAngleDisplace = 0;
     switch(Car.RunningMode)
     {
         case CARMODE_VELOCITY:

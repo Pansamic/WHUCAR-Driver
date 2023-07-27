@@ -176,7 +176,7 @@ void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size)
 		}
 	 	OLED_ShowChar(x+(size/2)*t,y,temp+'0'); 
 	}
-} 
+}
 //显示一个字符号串
 void OLED_ShowString(uint8_t x,uint8_t y,uint8_t *chr)
 {

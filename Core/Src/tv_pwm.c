@@ -30,7 +30,7 @@ void TV_PWM_Init(void)
 	* TB6612 need 10kHz to 20kHz, set peroid count to 200.
 	* Servo need 50Hz, set peroid count to 37500.
 	* Buzzer need 4kHz. set peroid count to 469.
-	* */
+	* */ 
 	PWMClockSet(PWM0_BASE, PWM_SYSCLK_DIV_64);
 	PWMGenConfigure(PWM0_BASE,PWM_GEN_0,PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC); // 2 channel of PWM for Left Motors
 	PWMGenConfigure(PWM0_BASE,PWM_GEN_1,PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC); // 2 channel of PWM for Right Motors
