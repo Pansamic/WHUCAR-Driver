@@ -25,6 +25,10 @@
 #include <i2cm_drv.h>
 #include <oled.h>
 
+void Test(){
+    printf("Darkbe write this code");
+}
+
 DCMotor LeftFrontMotor = {0};
 DCMotor LeftRearMotor = {0};
 DCMotor RightFrontMotor = {0};
