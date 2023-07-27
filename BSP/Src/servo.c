@@ -76,21 +76,21 @@ void Add_Servo(Servo_t *Servo, uint32_t PWM_Base, uint32_t PWM_Out, uint8_t Type
  *************************************************************************************/
 void SetServoAngle(Servo_t *Servo, float angle)
 {
-    if(angle > Servo->MaxAngle)
-        angle = Servo->MaxAngle;
-    else if(angle < Servo->MinAngle)
-        angle = Servo->MinAngle;
+        if(angle > Servo->MaxAngle)
+            angle = Servo->MaxAngle;
+        else if(angle < Servo->MinAngle)
+            angle = Servo->MinAngle;
     Servo->TargetAngle = angle;
 }
 
 /*************************************************************************************
- * @brief adjust servo with resistance to avoid damage when suddenly start.0.025~0.125 0.1 divided by 180/270
+ * @brief adjust servo with resistance to avoid damage when suddenly start.
  * 
  * @param Servo pointer to the servo motor
  *************************************************************************************/
 void AdjustServoAngle(Servo_t *Servo)
 {
-    Servo->AdjustedAngle = 0.5f * (Servo->TargetAngle - Servo->CurrentAngle);
+    Servo->AdjustedAngle = Servo->CurrentAngle + 0.5f * (Servo->TargetAngle - Servo->CurrentAngle);
     Servo->CurrentAngle = Servo->AdjustedAngle;
     uint16_t PulseWidth=0.025f;
     if(SERVO_180_DEGREE){
