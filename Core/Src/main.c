@@ -26,7 +26,7 @@
 #include <oled.h>
 
 void Test(){
-    printf("Darkbe write this code");
+    printf("Pansamic write this code");
 }
 
 DCMotor LeftFrontMotor = {0};
