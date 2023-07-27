@@ -140,7 +140,7 @@ int main( void )
 	TV_PWM_Init();
 	TV_ADC0_Init();
     OLED_Init();
-    OLED_ShowString(0,0,"Initializing System...");
+    OLED_ShowString(0,0,"Initializing...");
 
 #if USE_K210_UART
     io_Init(&K210io, K210_UART, K210io_InputBuf, K210_INTPUTBUF_SIZE, K210io_OutputBuf1, K210_OUTPUTBUF1_SIZE, K210io_OutputBuf2, K210_OUTPUTBUF2_SIZE);

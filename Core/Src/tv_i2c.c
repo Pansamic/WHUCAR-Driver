@@ -15,7 +15,6 @@
 #include <hw_ints.h>
 #include <tv_i2c.h>
 #include <tm4c129_it.h>
-
 #include <FreeRTOS.h>
 
 tI2CMInstance I2C8Inst;
