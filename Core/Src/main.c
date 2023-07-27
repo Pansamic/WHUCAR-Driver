@@ -26,7 +26,7 @@
 #include <oled.h>
 
 void Test(){
-    printf("Darkbe write this code");
+    printf("Darkbe wrote this code \r\n");
 }
 
 DCMotor LeftFrontMotor = {0};
