@@ -90,7 +90,7 @@ void SetServoAngle(Servo_t *Servo, float angle)
  *************************************************************************************/
 void AdjustServoAngle(Servo_t *Servo)
 {
-    Servo->AdjustedAngle = 0.5f * (Servo->TargetAngle - Servo->CurrentAngle);
+    Servo->AdjustedAngle = Servo->CurrentAngle + 0.5f * (Servo->TargetAngle - Servo->CurrentAngle);
     Servo->CurrentAngle = Servo->AdjustedAngle;
     uint16_t PulseWidth=0.025f;
     if(SERVO_180_DEGREE){
