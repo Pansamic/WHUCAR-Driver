@@ -183,6 +183,7 @@ void OLED_ShowIntNum(uint8_t x,uint8_t y,int num,uint8_t len)
 	uint8_t enshow=0;
 	if(num<0){
 		OLED_ShowChar(x,y,'-');
+		num=-num;
 	}
 	for(t=0;t<len;t++)
 	{
