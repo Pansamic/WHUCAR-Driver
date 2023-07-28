@@ -15,7 +15,7 @@ extern "C"{
 #endif
 #include <stdint.h>
 
-#define USE_K210_UART 0
+#define USE_K210_UART 1
 #if USE_K210_UART
 #define K210_UART UART0_BASE
 #define USE_K210_UART_TRANSMIT 0

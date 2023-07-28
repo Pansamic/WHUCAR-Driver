@@ -24,10 +24,7 @@
 #include <mdp_io.h>
 #include <i2cm_drv.h>
 #include <oled.h>
-
-void Test(){
-    printf("Darkbe wrote this code \r\n");
-}
+#include <buzzer.h>
 
 DCMotor LeftFrontMotor = {0};
 DCMotor LeftRearMotor = {0};
@@ -39,6 +36,11 @@ IRS_t IRS_dev = {0};
 
 Servo_t Servo1={0};
 Servo_t Servo2={0};
+/* trigger [0]:camera */
+uint8_t detection=0;
+uint8_t signal=0;
+
+
 #if USE_TFLUNA_UART
 TFLuna tfluna={0};
 #endif
@@ -173,8 +175,9 @@ int main( void )
     Add_Servo(&Servo2, PWM0_BASE, PWM_OUT_5, SERVO_180_DEGREE, -90.0f, 90.0f);
 	SetServoAngle(&Servo1, 0);
 	SetServoAngle(&Servo2, 0);
+    SetBuzzer(600,1);
 	Add_ICM20602();
-
+    SetBuzzer(600,0);
     // Car_SetVelocity(5,5);
 	// SetMotorPWM(&LeftFrontMotor, 100);
     // SetMotorVelocity(&LeftFrontMotor, 2);
@@ -195,14 +198,10 @@ int main( void )
 #if USE_K210_UART
 void K210_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
 {
-    if(PkgDst[0]==0)
-    {
-        Car_SetVelocity(*(float*)(PkgDst+1), *(float*)(PkgDst+5));
-    }
-    else if(PkgDst[0]==1)
-    {
-        Car_SetDistance(*(float*)(PkgDst+1), *(float*)(PkgDst+5));
-    }
+	memcpy(&signal, PkgDst, 4);
+    memcpy(&detection, PkgDst+4, 4);
+    printf("%d %d\r\n",signal,detection);
+    
 }
 #endif
 

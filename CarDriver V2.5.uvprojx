@@ -703,6 +703,11 @@
               <FileType>1</FileType>
               <FilePath>.\BSP\Src\irs.c</FilePath>
             </File>
+            <File>
+              <FileName>buzzer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\buzzer.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
