@@ -193,13 +193,13 @@ void ICM20602_StaticCallibration(void)
 	int32_t GyroZSum = 0;
     uint8_t Buffer[6];
 
-    for(uint16_t i=0 ; i<2000 ; i++)
+    for(uint16_t i=0 ; i<10000 ; i++)
     {
         ICM20602_Read(ICM20602_GYRO_XOUT_H, Buffer, 6);
         GyroXSum += (int16_t)((Buffer[0]<<8) | Buffer[1]);
         GyroYSum += (int16_t)((Buffer[2]<<8) | Buffer[3]);
         GyroZSum += (int16_t)((Buffer[4]<<8) | Buffer[5]);
-        SysCtlDelay(120000);
+        SysCtlDelay(12000);
     }
     ICM20602_dev.GOffsetX = (float)GyroXSum/10000.0f;
     ICM20602_dev.GOffsetY = (float)GyroYSum/10000.0f;
