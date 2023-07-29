@@ -118,6 +118,7 @@ void UpdateIMU(TimerHandle_t xTimer)
 {
 	configASSERT(xTimer);
 	ICM20602_Update();
+	//SetServoAngle(&Servo2, -ICM20602_dev.AngleZ);
 }
 void KeyDetect(void * argument)
 {
@@ -129,20 +130,24 @@ void KeyDetect(void * argument)
 			while(!GPIOPinRead(KEY0_GPIO_Port,KEY0_Pin))
 			{}
 			printf("key0 pressed\r\n");
-			SetServoAngle(&Servo1, Servo1.TargetAngle+5.0f);
+			SetServoAngle(&Servo1, Servo1.TargetAngle+0.5f);
+				SetServoAngle(&Servo2, Servo2.TargetAngle+0.5f);
 		}
 		if(!GPIOPinRead(KEY1_GPIO_Port,	KEY1_Pin))
 		{
 			while(!GPIOPinRead(KEY1_GPIO_Port,KEY1_Pin))
 			{}
 			printf("key1 pressed\r\n");
-			SetServoAngle(&Servo1, Servo1.TargetAngle-5.0f);
+			SetServoAngle(&Servo1, Servo1.TargetAngle-0.5f);
+				SetServoAngle(&Servo2, Servo2.TargetAngle-0.5f);
 		}
 		if(!GPIOPinRead(KEY2_GPIO_Port,	KEY2_Pin))
 		{
-			while(!GPIOPinRead(KEY1_GPIO_Port,KEY1_Pin))
-			{}
+			//while(!GPIOPinRead(KEY1_GPIO_Port,KEY1_Pin))
+			//{}
 			printf("key2 pressed\r\n");
+			SetServoAngle(&Servo1, Servo1.TargetAngle-0.05f);
+			vTaskDelay(50);
 		}
 	}
 }
@@ -172,6 +177,7 @@ void GetIRS(void * argument){
 	for(;;){
 		vTaskDelay(10);
 		IRS_Update();
+		
 	}
 }
 
@@ -189,9 +195,9 @@ void OLEDDisplay(void * argument){
 		OLED_ShowIntNum(80,2,(int)(Car.CurrentyAxisDistance*10),5);
 		/* Line 3 */
 		OLED_ShowString(0,4,"S1:");
-		OLED_ShowIntNum(24,4,Servo1.CurrentAngle,5);
-		OLED_ShowString(0,4,"S2:");
-		OLED_ShowIntNum(88,4,Servo2.CurrentAngle,5);
+		OLED_ShowIntNum(24,4,(int)Servo1.CurrentAngle,4);
+		OLED_ShowString(64,4,"S2:");
+		OLED_ShowIntNum(88,4,(int)Servo2.CurrentAngle,4);
 
 	}
 }

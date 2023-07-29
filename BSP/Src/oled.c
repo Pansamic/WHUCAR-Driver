@@ -181,8 +181,9 @@ void OLED_ShowIntNum(uint8_t x,uint8_t y,int num,uint8_t len)
 {         	
 	uint8_t t,temp;
 	uint8_t enshow=0;
+	uint8_t flag=0;
 	if(num<0){
-		OLED_ShowChar(x,y,'-');
+		flag=1;
 		num=-num;
 	}
 	for(t=0;t<len;t++)
@@ -198,6 +199,8 @@ void OLED_ShowIntNum(uint8_t x,uint8_t y,int num,uint8_t len)
 		}
 	 	OLED_ShowChar(x+(16/2)*t,y,temp+'0'); 
 	}
+	if(flag==1)
+		OLED_ShowChar(x,y,'-');
 }
 //显示一个字符号串
 void OLED_ShowString(uint8_t x,uint8_t y,uint8_t *chr)

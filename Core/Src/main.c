@@ -37,9 +37,9 @@ IRS_t IRS_dev = {0};
 Servo_t Servo1={0};
 Servo_t Servo2={0};
 /* trigger [0]:camera */
-uint8_t detection=0;
 uint8_t signal=0;
-
+uint8_t secondSignal=0;
+uint8_t detection=0;
 
 #if USE_TFLUNA_UART
 TFLuna tfluna={0};
@@ -199,8 +199,9 @@ int main( void )
 void K210_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
 {
 	memcpy(&signal, PkgDst, 4);
-    memcpy(&detection, PkgDst+4, 4);
-    printf("%d %d\r\n",signal,detection);
+    memcpy(&secondSignal, PkgDst+4,4);
+    memcpy(&detection, PkgDst+8, 4);
+    printf("%d %d %d\r\n",signal,secondSignal,detection);
     
 }
 #endif
