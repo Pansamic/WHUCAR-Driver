@@ -109,6 +109,30 @@ void UART2_IRQHandler(void)
 #endif
 }
 #endif
+
+
+/*
+ * @brief:UART2 receive interrupt handler.
+ * */
+#if USE_FEETCH_UART
+void UART2_IRQHandler(void)
+{
+	uint32_t IntStatus = UARTIntStatus(UART2_BASE, true);
+	uint8_t Char;
+#if USE_JETSON_UART_RECEIVE
+	if(IntStatus&UART_INT_RX)
+	{
+		UARTIntClear(UART2_BASE,UART_INT_RX);
+		while(UARTCharsAvail(UART2_BASE))
+		{
+			Char = UARTCharGetNonBlocking(UART2_BASE);
+			_io_InputBufWrite(&Jetsonio, &Char, 1);
+		}
+	}
+#endif
+	UARTIntClear(UART2_BASE,UART_INT_RX);
+}
+#endif
 /*
  * @brief:UART3 receive interrupt handler.
  * */

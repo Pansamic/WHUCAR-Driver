@@ -26,6 +26,8 @@
 #include <oled.h>
 #include <buzzer.h>
 
+#include <feetchh/SCServo.h>
+
 DCMotor LeftFrontMotor = {0};
 DCMotor LeftRearMotor = {0};
 DCMotor RightFrontMotor = {0};
@@ -101,6 +103,7 @@ const MDP_PkgFmt JetsonPkgFmt=
 void Jetson_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
 #endif 
 
+
 #if USE_BLE_UART
 #define BLE_OUTPUTBUF1_SIZE 64
 #define BLE_OUTPUTBUF2_SIZE 64
@@ -162,6 +165,12 @@ int main( void )
 	printf("Jetson nano UART init done.\r\n");
 #endif
 
+#if USE_FEETCH_UART
+    WritePos(1, 1000, 0, 1500);//舵机(ID1),以最高速度V=1500步/秒,运行至P1=1000
+	SysCtlDelay(120000000);
+    WritePos(1, 20, 0, 1500);//舵机(ID1),以最高速度V=1500步/秒,运行至P0=20
+#endif
+
 #if USE_TFLUNA_UART
     Add_TFLuna(&tfluna, "tfluna", TFLUNA_UART);
 #endif
@@ -175,7 +184,7 @@ int main( void )
     Add_Servo(&Servo2, PWM0_BASE, PWM_OUT_5, SERVO_180_DEGREE, -90.0f, 90.0f);
 	SetServoAngle(&Servo1, 0);
 	SetServoAngle(&Servo2, 0);
-    SetBuzzer(600,1);
+    //SetBuzzer(600,1);
 	Add_ICM20602();
     SetBuzzer(600,0);
     // Car_SetVelocity(5,5);

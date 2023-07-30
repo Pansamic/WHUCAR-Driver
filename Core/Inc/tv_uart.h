@@ -50,6 +50,13 @@ extern "C"{
 #define USE_USB_UART_RECEIVE 0
 #endif
 
+#define USE_FEETCH_UART 1
+#if USE_FEETCH_UART
+#define FEETCH_UART UART2_BASE
+#define USE_FEETCH_UART_TRANSMIT 1
+#define USE_FEETCH_UART_RECEIVE 0
+#endif
+
 void TV_UART_Init(void);
 void UART_Transmit(uint32_t UART_Handle, void *pData, uint32_t Length);
 

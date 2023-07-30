@@ -339,7 +339,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>rvmdk PART_TM4C1290NCPDT TARGET_IS_TM4C129_RA0</Define>
               <Undefine></Undefine>
-              <IncludePath>./;./inc;./driverlib;./Core/Inc;./BSP/Inc;./third_party/FreeRTOS/Source/include;./third_party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;./MCU_Develop_Package;./CMSIS/Core/Include;./lvgl/src;./lvgl/src/core;./lvgl/src/disp;./lvgl/src/draw;./lvgl/src/draw/sw;./lvgl/src/draw/sw/blend;./lvgl/src/font;./lvgl/src/indev;./lvgl/src/layouts;./lvgl/src/layouts/flex;./lvgl/src/layouts/grid;./lvgl/src/misc;./lvgl/src/osal;./lvgl/src/themes;./lvgl/src/themes/basic;./lvgl/src/themes/default;./lvgl/src/themes/mono;./lvgl/src/tick;./lvgl/src/widgets;./lvgl/src/widgets/animing;./lvgl/src/widgets/arc;./lvgl/src/widgets/bar;./lvgl/src/widgets/btn;./lvgl/src/widgets/btnmatrix;./lvgl/src/widgets/calendar;./lvgl/src/widgets/canvas;./lvgl/src/widgets/chart;./lvgl/src/widgets/checkbox;./lvgl/src/widgets/dropdown;./lvgl/src/widgets/img;./lvgl/src/widgets/imgbtn;./lvgl/src/widgets/keyboard;./lvgl/src/widgets/label;./lvgl/src/widgets/led;./lvgl/src/widgets/line;./lvgl/src/widgets/list;./lvgl/src/widgets/menu;./lvgl/src/widgets/meter;./lvgl/src/widgets/msgbox;./lvgl/src/widgets/objx_templ;./lvgl/src/widgets/roller;./lvgl/src/widgets/slider;./lvgl/src/widgets/span;./lvgl/src/widgets/spinbox;./lvgl/src/widgets/spinner;./lvgl/src/widgets/switch;./lvgl/src/widgets/table;./lvgl/src/widgets/tabview;./lvgl/src/widgets/textarea;./lvgl/src/widgets/tileview;./lvgl/src/widgets/win;./lvgl/examples/porting</IncludePath>
+              <IncludePath>./;./inc;./driverlib;./Core/Inc;./BSP/Inc;./third_party/FreeRTOS/Source/include;./third_party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;./MCU_Develop_Package;./CMSIS/Core/Include;./lvgl/src;./lvgl/src/core;./lvgl/src/disp;./lvgl/src/draw;./lvgl/src/draw/sw;./lvgl/src/draw/sw/blend;./lvgl/src/font;./lvgl/src/indev;./lvgl/src/layouts;./lvgl/src/layouts/flex;./lvgl/src/layouts/grid;./lvgl/src/misc;./lvgl/src/osal;./lvgl/src/themes;./lvgl/src/themes/basic;./lvgl/src/themes/default;./lvgl/src/themes/mono;./lvgl/src/tick;./lvgl/src/widgets;./lvgl/src/widgets/animing;./lvgl/src/widgets/arc;./lvgl/src/widgets/bar;./lvgl/src/widgets/btn;./lvgl/src/widgets/btnmatrix;./lvgl/src/widgets/calendar;./lvgl/src/widgets/canvas;./lvgl/src/widgets/chart;./lvgl/src/widgets/checkbox;./lvgl/src/widgets/dropdown;./lvgl/src/widgets/img;./lvgl/src/widgets/imgbtn;./lvgl/src/widgets/keyboard;./lvgl/src/widgets/label;./lvgl/src/widgets/led;./lvgl/src/widgets/line;./lvgl/src/widgets/list;./lvgl/src/widgets/menu;./lvgl/src/widgets/meter;./lvgl/src/widgets/msgbox;./lvgl/src/widgets/objx_templ;./lvgl/src/widgets/roller;./lvgl/src/widgets/slider;./lvgl/src/widgets/span;./lvgl/src/widgets/spinbox;./lvgl/src/widgets/spinner;./lvgl/src/widgets/switch;./lvgl/src/widgets/table;./lvgl/src/widgets/tabview;./lvgl/src/widgets/textarea;./lvgl/src/widgets/tileview;./lvgl/src/widgets/win;./lvgl/examples/porting;./BSP/Inc/feetchh</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -707,6 +707,21 @@
               <FileName>buzzer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\BSP\Src\buzzer.c</FilePath>
+            </File>
+            <File>
+              <FileName>SCS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\feetchc\SCS.c</FilePath>
+            </File>
+            <File>
+              <FileName>SCSCL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\feetchc\SCSCL.c</FilePath>
+            </File>
+            <File>
+              <FileName>SCSerail.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\feetchc\SCSerail.c</FilePath>
             </File>
           </Files>
         </Group>
