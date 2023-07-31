@@ -14,9 +14,9 @@ int getErr(void)
 int WritePos(uint8_t ID, uint16_t Position, uint16_t Time, uint16_t Speed)
 {
 	uint8_t bBuf[6];
-	Host2SCS(bBuf+0, bBuf+1, Speed);
+	Host2SCS(bBuf+0, bBuf+1, Position);
 	Host2SCS(bBuf+2, bBuf+3, Time);
-	Host2SCS(bBuf+4, bBuf+5, Position);
+	Host2SCS(bBuf+4, bBuf+5, Speed);
 	
 	return genWrite(ID, SCSCL_GOAL_POSITION_L, bBuf, 6);
 }

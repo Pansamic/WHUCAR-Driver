@@ -166,9 +166,9 @@ int main( void )
 #endif
 
 #if USE_FEETCH_UART
-    WritePos(1, 1000, 0, 1500);//舵机(ID1),以最高速度V=1500步/秒,运行至P1=1000
+    WritePos(1, 2048, 0, 1000);//舵机(ID1),以最高速度V=1500步/秒,运行至P1=1000
 	SysCtlDelay(120000000);
-    WritePos(1, 20, 0, 1500);//舵机(ID1),以最高速度V=1500步/秒,运行至P0=20
+    WritePos(1, 20, 0, 1000);//舵机(ID1),以最高速度V=1500步/秒,运行至P0=20
 #endif
 
 #if USE_TFLUNA_UART
@@ -184,9 +184,10 @@ int main( void )
     Add_Servo(&Servo2, PWM0_BASE, PWM_OUT_5, SERVO_180_DEGREE, -90.0f, 90.0f);
 	SetServoAngle(&Servo1, 0);
 	SetServoAngle(&Servo2, 0);
-    //SetBuzzer(600,1);
 	Add_ICM20602();
-    SetBuzzer(600,0);
+    SetBuzzer(700,1);
+    SysCtlDelay(40000000);
+    SetBuzzer(700,0);
     // Car_SetVelocity(5,5);
 	// SetMotorPWM(&LeftFrontMotor, 100);
     // SetMotorVelocity(&LeftFrontMotor, 2);
