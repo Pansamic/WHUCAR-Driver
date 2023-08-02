@@ -95,7 +95,7 @@ void AdjustServoAngle(Servo_t *Servo)
     uint16_t PulseWidth=0.025f;
     if(SERVO_180_DEGREE){
         PulseWidth = SERVO_PWM_PERIOD*(0.025f+(Servo->AdjustedAngle+90)/180.0f*0.1f);
-			printf("%d\r\n",PulseWidth);
+			//printf("%d\r\n",PulseWidth);
     }
     else if(SERVO_270_DEGREE){
         PulseWidth = SERVO_PWM_PERIOD*(0.025f+(Servo->AdjustedAngle+135)/270.0f*0.1f);

@@ -15,7 +15,7 @@ extern "C"{
 #endif
 #include <stdint.h>
 
-#define USE_K210_UART 1
+#define USE_K210_UART 0
 #if USE_K210_UART
 #define K210_UART UART0_BASE
 #define USE_K210_UART_TRANSMIT 0
@@ -25,7 +25,7 @@ extern "C"{
 #define USE_BLE_UART 1
 #if USE_BLE_UART
 #define BLE_UART UART1_BASE
-#define USE_BLE_UART_TRANSMIT 0
+#define USE_BLE_UART_TRANSMIT 1
 #define USE_BLE_UART_RECEIVE 1
 #endif
 

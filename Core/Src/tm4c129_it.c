@@ -17,6 +17,7 @@
 #include <icm20602.h>
 
 extern tI2CMInstance g_sI2CMSimpleInst;
+extern MDP_io BLEio;
 
 void LFEA_Process(void);
 void LFEB_Process(void);
@@ -83,7 +84,9 @@ void UART1_IRQHandler(void)
 		while(UARTCharsAvail(UART1_BASE))
 		{
 			Char = UARTCharGetNonBlocking(UART1_BASE);
+			UARTCharPut(USB_UART, Char);
 			UARTCharPutNonBlocking(UART1_BASE,Char);
+			
 		}
 	}
 }
@@ -165,6 +168,7 @@ void UART4_IRQHandler(void)
 		while(UARTCharsAvail(UART4_BASE))
 		{
 			Char = UARTCharGet(UART4_BASE);
+			UARTCharPut(BLE_UART, Char);
 			UARTCharPut(UART4_BASE,Char);
 		}
 	}
