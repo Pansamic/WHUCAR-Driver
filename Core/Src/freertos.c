@@ -57,7 +57,7 @@ void GetKeyBoard()
 			if(GPIOPinRead(KEYBOARD_InPort,GPIO_PIN_1<<j)==0){
 				while (GPIOPinRead(KEYBOARD_InPort,GPIO_PIN_1<<j)==0)
 				{}
-				key_index=i*4+j+1;
+				key_index=17-i*4+j;
 			}
 		}
 	}
