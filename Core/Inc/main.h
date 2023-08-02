@@ -130,6 +130,9 @@ extern "C"{
 #define KEY2_Pin GPIO_PIN_0
 #define KEY2_GPIO_Port GPIO_PORTE_BASE
 
+#define KEYBOARD_OutPort GPIO_PORTL_BASE
+#define KEYBOARD_InPort GPIO_PORTM_BASE
+
 /*****************************************************/
 /*                       ADC                         */
 /*****************************************************/

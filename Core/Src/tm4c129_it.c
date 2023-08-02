@@ -155,6 +155,7 @@ void UART3_IRQHandler(void)
 	}
 }
 #endif
+extern int signal;
 /*
  * @brief:UART4 receive interrupt handler.
  * */
@@ -168,8 +169,8 @@ void UART4_IRQHandler(void)
 		while(UARTCharsAvail(UART4_BASE))
 		{
 			Char = UARTCharGet(UART4_BASE);
-			UARTCharPut(BLE_UART, Char);
 			UARTCharPut(UART4_BASE,Char);
+			signal=Char;
 		}
 	}
 	if((UARTRxErrorGet(UART4_BASE)&UART_RXERROR_OVERRUN)==UART_RXERROR_OVERRUN)

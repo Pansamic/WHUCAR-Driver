@@ -152,25 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>167</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>10274</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Core\Src\tm4c129_it.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\WHUCAR_Driver_V2\Core/Src/tm4c129_it.c\167</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>83</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>10174</Address>
+          <Address>9190</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -180,6 +164,22 @@
           <Filename>.\Core\Src\tm4c129_it.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\WHUCAR_Driver_V2\Core/Src/tm4c129_it.c\83</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>52</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>3436</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\Core\Src\freertos.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\\Core/Src/freertos.c\52</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

@@ -47,7 +47,7 @@ extern "C"{
 #if USE_USB_UART
 #define USB_UART UART4_BASE
 #define USE_USB_UART_TRANSMIT 1
-#define USE_USB_UART_RECEIVE 0
+#define USE_USB_UART_RECEIVE 1
 #endif
 
 #define USE_FEETCH_UART 1
